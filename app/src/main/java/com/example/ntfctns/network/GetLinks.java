@@ -22,11 +22,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -38,8 +35,6 @@ import java.util.stream.Collectors;
 public class GetLinks {
     String MESSAGE_DIV = "tgme_widget_message_bubble";
     String TEXT_DIV = "tgme_widget_message_text";
-    String TO_BE_REPLACED = "br";
-    String TO_BE_INSERTED = "\n";
     String SECTION = "tgme_widget_message_date";
     String DATETIME = " time";
     String D_TIME = "datetime";
@@ -75,7 +70,6 @@ public class GetLinks {
                                         Article art = makeArticle(section, artBody, word);
                                         artList.add(art);
                                     }
-
                                 }
                             }
                         }

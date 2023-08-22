@@ -10,22 +10,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.ntfctns.adap.ArticleAd;
-import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.databinding.FragmentFirstBinding;
 import com.example.ntfctns.network.GetLinks;
-import com.example.ntfctns.utils.Popup;
 import com.example.ntfctns.utils.WordFuncs;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FirstFragment extends Fragment {
@@ -34,7 +24,7 @@ public class FirstFragment extends Fragment {
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
 

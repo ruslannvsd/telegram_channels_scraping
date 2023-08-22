@@ -46,9 +46,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.google.code.gson:gson:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.1.0")
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.1")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.1")
     implementation("org.jsoup:jsoup:1.10.3")
     implementation("com.squareup.picasso:picasso:2.71828")
 
