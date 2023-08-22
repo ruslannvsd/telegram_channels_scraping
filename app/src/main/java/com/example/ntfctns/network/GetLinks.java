@@ -1,5 +1,13 @@
 package com.example.ntfctns.network;
 
+import static com.example.ntfctns.consts.Cons.ART_META;
+import static com.example.ntfctns.consts.Cons.DATETIME;
+import static com.example.ntfctns.consts.Cons.D_TIME;
+import static com.example.ntfctns.consts.Cons.LINK;
+import static com.example.ntfctns.consts.Cons.MESSAGE_DIV;
+import static com.example.ntfctns.consts.Cons.SECTION;
+import static com.example.ntfctns.consts.Cons.TEXT_DIV;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,13 +41,7 @@ import java.util.stream.Collectors;
 
 
 public class GetLinks {
-    String MESSAGE_DIV = "tgme_widget_message_bubble";
-    String TEXT_DIV = "tgme_widget_message_text";
-    String SECTION = "tgme_widget_message_date";
-    String DATETIME = " time";
-    String D_TIME = "datetime";
-    String LINK = "href";
-    String ART_META = "tgme_widget_message_meta";
+
 
     public void getLinks(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx) {
         List<String> links = Cons.channels;
@@ -130,5 +132,4 @@ public class GetLinks {
                 .values());
         return sorting(merged);
     }
-
 }
