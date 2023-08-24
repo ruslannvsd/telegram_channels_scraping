@@ -17,19 +17,35 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:hint="Enter a word"
+            android:textSize="20sp"
+            android:fontFamily="@font/graublau"
             android:gravity="center"
             android:maxLength="70"
             android:inputType="text"
             android:maxLines="1"
             tools:ignore="Autofill" />
 
+        <TextView
+            android:id="@+id/show_quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textSize="18sp"
+            android:fontFamily="@font/graublau"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/enter_word"
+            android:gravity="center"
+            android:maxLength="70" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/article_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/enter_word"
+            app:layout_constraintTop_toBottomOf="@+id/show_quantity"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:layout_editor_absoluteY="16dp" />

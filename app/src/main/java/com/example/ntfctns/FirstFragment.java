@@ -27,10 +27,8 @@ public class FirstFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         bnd = FragmentFirstBinding.inflate(inflater, container, false);
         return bnd.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -46,7 +44,7 @@ public class FirstFragment extends Fragment {
                     List<String> words = WordFuncs.handlePunctuation(text, requireContext());
                     if (words != null) {
                         Log.i("Words", words.toString());
-                        new GetLinks().getLinks(words, rv, artAd, requireContext());
+                        new GetLinks().getLinks(words, rv, artAd, requireContext(), bnd.showQuantity);
                     }
                 } else Toast.makeText(requireContext(), "Enter a word", Toast.LENGTH_LONG).show();
             }

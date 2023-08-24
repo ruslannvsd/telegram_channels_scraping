@@ -12,6 +12,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
 public class GetLinks {
 
 
-    public void getLinks(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx) {
+    public void getLinks(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx, TextView txtView) {
         List<String> links = Cons.channels;
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         List<Article> artList = new ArrayList<>();
@@ -91,6 +92,7 @@ public class GetLinks {
                         rv.setLayoutManager(new LinearLayoutManager(ctx));
                         artAd.setArticles(articles, ctx);
                         rv.setAdapter(artAd);
+                        txtView.setText(String.valueOf(articles.size()));
                     });
                 } else {
                     List<Article> articles = merging(artList);
@@ -98,6 +100,10 @@ public class GetLinks {
                         rv.setLayoutManager(new LinearLayoutManager(ctx));
                         artAd.setArticles(articles, ctx);
                         rv.setAdapter(artAd);
+                        String results = results(words, articles);
+                        if (results != null) {
+                            txtView.setText(results);
+                        }
                     });
                 }
             }
@@ -131,5 +137,23 @@ public class GetLinks {
                         }))
                 .values());
         return sorting(merged);
+    }
+    private String results(List<String> words, List<Article> articles) {
+        StringBuilder string = new StringBuilder();
+        int amount = 0;
+        for (String word : words) {
+            for (Article article : articles) {
+                if (article.keywords.contains(word)) {
+                    amount++;
+                }
+            }
+            string.append(word).append(" - ").append(amount).append("\n");
+        }
+        if (!string.toString().equals("")) {
+            return string.toString().trim();
+        }
+        else {
+            return null;
+        }
     }
 }
