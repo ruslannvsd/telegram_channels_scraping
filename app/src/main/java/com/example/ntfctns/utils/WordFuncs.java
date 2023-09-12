@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WordFuncs {
@@ -19,9 +20,7 @@ public class WordFuncs {
         // and a list as a list to be made
         if (text.contains(" ")) { // if a space as a divider or words
             String[] text_split = text.split(" ");
-            for (String item : text_split) {
-                words.add(item);
-            }
+            Collections.addAll(words, text_split);
         } else words.add(text); // if a single word was entered
         for (String item : words) {
             if (item.matches(".*[" + "!\"#$%&'()*+,./:;<=>?@\\[\\]^`{|}~" + "].*")) {

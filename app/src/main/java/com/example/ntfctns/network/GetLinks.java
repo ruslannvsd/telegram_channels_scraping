@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ntfctns.adap.ArticleAd;
 import com.example.ntfctns.classes.Article;
 import com.example.ntfctns.consts.Cons;
+import com.example.ntfctns.utils.ListFuncs;
 import com.example.ntfctns.utils.TimeConverter;
 import com.example.ntfctns.utils.WordFuncs;
 
@@ -32,19 +33,16 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 public class GetLinks {
-    public void getLinks(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx, TextView txtView, int hours) {
-        List<String> links = Cons.channels;
+    public void getArticles(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx, TextView txtView, int hours) {
+        List<String> links = Cons.CHANNELS;
         //  single-threaded executor for sequential execution in the order of task submission
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         List<Article> artList = new ArrayList<>();
@@ -92,7 +90,7 @@ public class GetLinks {
                 Toast.makeText(ctx, "Nothing has been found", Toast.LENGTH_LONG).show();
             } else {
                 if (words.size() == 1) {
-                    List<Article> articles = sorting(artList);
+                    List<Article> articles = new ListFuncs().sorting(artList);
                     handler.post(() -> {
                         rv.setLayoutManager(new LinearLayoutManager(ctx));
                         artAd.setArticles(articles, ctx);
@@ -100,7 +98,7 @@ public class GetLinks {
                         txtView.setText(String.valueOf(articles.size()));
                     });
                 } else {
-                    List<Article> articles = merging(artList);
+                    List<Article> articles = new ListFuncs().merging(artList);
                     handler.post(() -> {
                         rv.setLayoutManager(new LinearLayoutManager(ctx));
                         artAd.setArticles(articles, ctx);
@@ -146,24 +144,6 @@ public class GetLinks {
         return null;
     }
 
-    private List<Article> sorting(List<Article> artList) {
-        return artList.stream()
-                .sorted(Comparator.comparingLong(article -> -article.time))
-                .collect(Collectors.toList());
-    }
-
-    private List<Article> merging(List<Article> articles) {
-        List<Article> merged = new ArrayList<>(articles.stream()
-                .collect(Collectors.toMap(
-                        article -> article.link,
-                        Function.identity(),
-                        (article1, article2) -> {
-                            article1.keywords.addAll(article2.keywords);
-                            return article1;
-                        }))
-                .values());
-        return sorting(merged);
-    }
 
     private String results(List<String> words, List<Article> articles) {
         StringBuilder string = new StringBuilder();
@@ -174,7 +154,7 @@ public class GetLinks {
                     amount++;
                 }
             }
-            string.append(word).append(" - ").append(amount).append("\n");
+            string.append(word).append(" - ").append(amount).append("; ");
         }
         if (!string.toString().equals("")) {
             return string.toString().trim();

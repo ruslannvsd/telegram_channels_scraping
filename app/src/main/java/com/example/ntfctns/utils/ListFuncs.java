@@ -19,7 +19,7 @@ public class ListFuncs {
                 }
             }
             if (amount != 0) {
-                string.append(word).append(" - ").append(amount).append("\n");
+                string.append(word).append(" - ").append(amount).append("; ");
             }
         }
         if (!string.toString().equals("")) {
