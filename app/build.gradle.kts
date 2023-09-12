@@ -47,6 +47,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("org.jsoup:jsoup:1.10.3")
     implementation("com.squareup.picasso:picasso:2.71828")
+    implementation ("androidx.work:work-runtime:2.8.1")
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {

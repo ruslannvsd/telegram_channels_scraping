@@ -12,21 +12,52 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <EditText
-            android:id="@+id/enter_word"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/input_field"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:hint="Enter a word"
-            android:textSize="20sp"
-            android:fontFamily="@font/graublau"
-            android:gravity="center"
-            android:maxLength="70"
-            android:inputType="text"
-            android:maxLines="1"
-            tools:ignore="Autofill" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <EditText
+                android:id="@+id/enter_word"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="parent"
+                android:hint="Enter a word"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:maxLength="70"
+                android:inputType="text"
+                android:maxLines="1"
+                tools:ignore="Autofill" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
+
+            <EditText
+                android:id="@+id/hours"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:hint="Hours"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLines="1"
+                android:maxLength="2"
+                tools:ignore="Autofill" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/show_quantity"
@@ -37,7 +68,7 @@
             android:fontFamily="@font/graublau"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/enter_word"
+            app:layout_constraintTop_toBottomOf="@+id/input_field"
             android:gravity="center"
             android:maxLength="70" />
 

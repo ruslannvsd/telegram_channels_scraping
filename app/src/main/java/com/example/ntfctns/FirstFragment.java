@@ -1,6 +1,7 @@
 package com.example.ntfctns;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -36,19 +37,13 @@ public class FirstFragment extends Fragment {
         RecyclerView rv = bnd.articleRv;
         ArticleAd artAd = new ArticleAd();
 
-        bnd.enterWord.setOnKeyListener((v, keyCode, event) -> {
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                if (bnd.enterWord.getText().length() != 0) {
-                    String text = bnd.enterWord.getText().toString();
-                    Log.i("Text", text);
-                    List<String> words = WordFuncs.handlePunctuation(text, requireContext());
-                    if (words != null) {
-                        Log.i("Words", words.toString());
-                        new GetLinks().getLinks(words, rv, artAd, requireContext(), bnd.showQuantity);
-                    }
-                } else Toast.makeText(requireContext(), "Enter a word", Toast.LENGTH_LONG).show();
-            }
-            return true;
+        bnd.enterWord.setOnKeyListener((v, keyCode, event)-> {
+            btnClick(keyCode, event, rv, artAd);
+            return false;
+        });
+        bnd.hours.setOnKeyListener((v, keyCode, event)-> {
+            btnClick(keyCode, event, rv, artAd);
+            return false;
         });
     }
 
@@ -56,5 +51,26 @@ public class FirstFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         bnd = null;
+    }
+    private void btnClick(int keyCode, KeyEvent event, RecyclerView rv, ArticleAd artAd) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (bnd.enterWord.getText().length() != 0) {
+                String text = bnd.enterWord.getText().toString();
+                Log.i("Text", text);
+                List<String> words = WordFuncs.handlePunctuation(text, requireContext());
+                if (words != null) {
+                    Log.i("Words", words.toString());
+                    String hoursStr = bnd.hours.getText().toString();
+                    int hours = 0;
+                    if (!hoursStr.isEmpty()) {
+                        int hoursInt = Integer.parseInt(hoursStr);
+                        if (hoursInt > 0 && hoursInt <= 48) {
+                            hours = hoursInt;
+                        }
+                    }
+                    new GetLinks().getLinks(words, rv, artAd, requireContext(), bnd.showQuantity, hours);
+                }
+            } else Toast.makeText(requireContext(), "Enter a word", Toast.LENGTH_LONG).show();
+        }
     }
 }
