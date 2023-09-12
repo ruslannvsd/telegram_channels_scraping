@@ -15,6 +15,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,12 +43,12 @@ import java.util.stream.Collectors;
 
 
 public class GetLinks {
-
-
-    public void getLinks(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx, TextView txtView) {
+    public void getLinks(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx, TextView txtView, int hours) {
         List<String> links = Cons.channels;
+        //  single-threaded executor for sequential execution in the order of task submission
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         List<Article> artList = new ArrayList<>();
+        // a callable task that will be executed by the executor service
         Callable<Void> task = () -> {
             Document doc;
             for (String link : links) {
@@ -63,15 +64,19 @@ public class GetLinks {
                                 String lower = artBody.toLowerCase();
                                 if (!word.contains("_")) {
                                     if (lower.contains(word.toLowerCase())) {
-                                        Article art = makeArticle(section, artBody, word);
-                                        artList.add(art);
+                                        Article art = makeArticle(section, artBody, word, hours);
+                                        if (art != null) {
+                                            artList.add(art);
+                                        }
                                     }
                                 }
                                 else {
                                     String[] splitWord = word.split("_");
                                     if (lower.contains(splitWord[0].toLowerCase()) && lower.contains(splitWord[1].toLowerCase())) {
-                                        Article art = makeArticle(section, artBody, word);
-                                        artList.add(art);
+                                        Article art = makeArticle(section, artBody, word, hours);
+                                        if (art != null) {
+                                            artList.add(art);
+                                        }
                                     }
                                 }
                             }
@@ -111,21 +116,42 @@ public class GetLinks {
         };
         executorService.submit(task);
     }
-    private Article makeArticle(Element el, String body, String keyW) {
-        String imgLink = WordFuncs.getLink(el);
-        String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
-        long millis = TimeConverter.convertToMillis(articleTime);
-        Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();
-        String art_link = linkElement.attr(LINK);
-        List<String> keywords = new ArrayList<>();
-        keywords.add(keyW);
-        return new Article(imgLink, art_link, body, millis, keywords);
+
+    @Nullable
+    private Article makeArticle(Element el, String body, String keyW, int hours) {
+        if (hours != 0) {
+            long now = System.currentTimeMillis();
+            long hoursMilli = (long) hours * 60 * 60 * 1000;
+            long threshold = now - hoursMilli;
+            String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
+            long millis = TimeConverter.convertToMillis(articleTime);
+            if (millis >= threshold) {
+                String imgLink = WordFuncs.getLink(el);
+                Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();
+                String art_link = linkElement.attr(LINK);
+                List<String> keywords = new ArrayList<>();
+                keywords.add(keyW);
+                return new Article(imgLink, art_link, body, millis, keywords);
+            }
+        } else {
+            String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
+            long millis = TimeConverter.convertToMillis(articleTime);
+            String imgLink = WordFuncs.getLink(el);
+            Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();
+            String art_link = linkElement.attr(LINK);
+            List<String> keywords = new ArrayList<>();
+            keywords.add(keyW);
+            return new Article(imgLink, art_link, body, millis, keywords);
+        }
+        return null;
     }
+
     private List<Article> sorting(List<Article> artList) {
         return artList.stream()
                 .sorted(Comparator.comparingLong(article -> -article.time))
                 .collect(Collectors.toList());
     }
+
     private List<Article> merging(List<Article> articles) {
         List<Article> merged = new ArrayList<>(articles.stream()
                 .collect(Collectors.toMap(
@@ -138,6 +164,7 @@ public class GetLinks {
                 .values());
         return sorting(merged);
     }
+
     private String results(List<String> words, List<Article> articles) {
         StringBuilder string = new StringBuilder();
         int amount = 0;
