@@ -79,7 +79,7 @@ public class GetOfflineLinks {
         String results = new ListFuncs().results(keywords, articles);
         if (results != null) {
             text = results;
-            new Saving().saveSummary(ctx, results);
+            new Saving().saveSummary(ctx, results, Cons.SUMMARY_KEY);
             new Saving().saveArticles(ctx, articles);
         }
         return text;

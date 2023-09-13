@@ -1,5 +1,7 @@
 package com.example.ntfctns.utils;
 
+import android.util.Log;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +14,7 @@ public class TimeConverter {
     private static final String ART_TIME = "hh.mma dd/MM/yy";
 
     public static long convertToMillis(String datetimeStr) {
+        Log.i("custom datetimeStr", datetimeStr);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TG_TIME);
         LocalDateTime dateTime = LocalDateTime.parse(datetimeStr, formatter);
         return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();

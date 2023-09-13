@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 .setConstraints(constraints)
                 .build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                "MyPeriodicWork",
+                "PeriodicWork",
                 ExistingPeriodicWorkPolicy.KEEP,
                 request
         );

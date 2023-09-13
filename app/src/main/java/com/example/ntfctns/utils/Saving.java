@@ -52,11 +52,11 @@ public class Saving {
         editor.apply();
     }
 
-    public void saveSummary(Context ctx, String summary) {
+    public void saveSummary(Context ctx, String summary, String key) {
         Log.i("custom Saving Summary", summary);
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(Cons.SUMMARY_KEY, summary);
+        editor.putString(key, summary);
         editor.apply();
     }
 
