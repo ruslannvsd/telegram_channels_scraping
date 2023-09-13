@@ -30,7 +30,6 @@
                 android:hint="Enter a word"
                 android:textSize="20sp"
                 android:gravity="center"
-                android:maxLength="70"
                 android:inputType="text"
                 android:maxLines="1"
                 tools:ignore="Autofill" />

@@ -1,5 +1,7 @@
 package com.example.ntfctns.utils;
 
+import android.util.Log;
+
 import com.example.ntfctns.classes.Article;
 
 import java.util.ArrayList;
@@ -24,8 +26,7 @@ public class ListFuncs {
         }
         if (!string.toString().equals("")) {
             return string.toString().trim();
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -42,6 +43,7 @@ public class ListFuncs {
                         Function.identity(),
                         (article1, article2) -> {
                             article1.keywords.addAll(article2.keywords);
+                            Log.i("custom Merging Article", article1.link + " - " + article1.keywords);
                             return article1;
                         }))
                 .values());

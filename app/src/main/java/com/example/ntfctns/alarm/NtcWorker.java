@@ -33,7 +33,6 @@ public class NtcWorker extends Worker {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-
         String summary = new GetOfflineLinks().getArticles(getApplicationContext());
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
@@ -48,7 +47,6 @@ public class NtcWorker extends Worker {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(summary))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
-        Log.i("Custom DoWork, ", "Works");
         notificationManager.notify(TG_NTC_ID, builder.build());
         return Result.success();
     }

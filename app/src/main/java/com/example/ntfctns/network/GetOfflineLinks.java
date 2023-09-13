@@ -32,7 +32,6 @@ import java.util.Objects;
 
 public class GetOfflineLinks {
     public String getArticles(Context ctx) {
-        int hours = 4;
         String text = null;
         List<String> keywords = Cons.KEYWORDS;
         List<String> links = Cons.CHANNELS;
@@ -41,8 +40,7 @@ public class GetOfflineLinks {
         for (String link : links) {
             Log.i("Link", link);
             try {
-                doc = Jsoup.connect(link).timeout(20 * 1000).get();
-                Log.i("custom Doc gotten : ", "fun works");
+                doc = Jsoup.connect(link).timeout(30 * 1000).get();
                 Elements messageSections = doc.select("div." + MESSAGE_DIV);
                 for (Element section : messageSections) {
                     Element articleBody = section.select("div." + TEXT_DIV).first();
@@ -52,7 +50,7 @@ public class GetOfflineLinks {
                             String lower = artBody.toLowerCase();
                             if (!word.contains("_")) {
                                 if (lower.contains(word.toLowerCase())) {
-                                    Article art = makeArticle(section, artBody, word, hours);
+                                    Article art = makeArticle(section, artBody, word);
                                     if (art != null) {
                                         artList.add(art);
                                     }
@@ -60,7 +58,7 @@ public class GetOfflineLinks {
                             } else {
                                 String[] splitWord = word.split("_");
                                 if (lower.contains(splitWord[0].toLowerCase()) && lower.contains(splitWord[1].toLowerCase())) {
-                                    Article art = makeArticle(section, artBody, word, hours);
+                                    Article art = makeArticle(section, artBody, word);
                                     if (art != null) {
                                         artList.add(art);
                                     }
@@ -73,44 +71,37 @@ public class GetOfflineLinks {
                 Log.e("ERROR :", Objects.requireNonNull(e.getMessage()));
                 throw new RuntimeException(e);
             }
-            List<Article> articles = new ListFuncs().merging(artList);
-
-            String results = new ListFuncs().results(keywords, articles);
-            if (results != null) {
-                text = results;
-                new Saving().saveArticles(ctx, articles);
-                new Saving().saveSummary(ctx, results);
-            }
+        }
+        List<Article> articles = new ListFuncs().merging(artList);
+        for (Article art : articles) {
+            Log.i("custom Article : ", art.link);
+        }
+        String results = new ListFuncs().results(keywords, articles);
+        if (results != null) {
+            text = results;
+            new Saving().saveSummary(ctx, results);
+            new Saving().saveArticles(ctx, articles);
         }
         return text;
     }
 
     @Nullable
-    private Article makeArticle(Element el, String body, String keyW, int hours) {
-        if (hours != 0) {
-            long now = System.currentTimeMillis();
-            long hoursMilli = (long) hours * 60 * 60 * 1000;
-            long threshold = now - hoursMilli;
-            String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
-            long millis = TimeConverter.convertToMillis(articleTime);
-            if (millis >= threshold) {
-                String imgLink = WordFuncs.getLink(el);
-                Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();
-                String art_link = linkElement.attr(LINK);
-                List<String> keywords = new ArrayList<>();
-                keywords.add(keyW);
-                return new Article(imgLink, art_link, body, millis, keywords);
-            }
-        } else {
-            String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
-            long millis = TimeConverter.convertToMillis(articleTime);
+    private Article makeArticle(Element el, String body, String keyW) {
+        long now = System.currentTimeMillis();
+        long hoursMilli = (long) 8 * 60 * 60 * 1000;
+        long threshold = now - hoursMilli;
+        String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
+        long millis = TimeConverter.convertToMillis(articleTime);
+        if (millis >= threshold) {
             String imgLink = WordFuncs.getLink(el);
             Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();
             String art_link = linkElement.attr(LINK);
             List<String> keywords = new ArrayList<>();
             keywords.add(keyW);
+            Log.i("custom MakeArticle : ", linkElement + " : " + keywords);
             return new Article(imgLink, art_link, body, millis, keywords);
         }
+
         return null;
     }
 }

@@ -38,12 +38,10 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
     public void onBindViewHolder(@NonNull ArticleAd.ArticleViewHolder h, int p) {
         Article art = articles.get(p);
         int color = cardBgColor(art.time, ctx);
-        Log.i("Color", String.valueOf(color));
         h.bnd.card.setBackgroundColor(color);
         String time = TimeConverter.convertToReadableTime(art.time);
         h.bnd.keyword.setText(String.valueOf(art.keywords));
         if (!Objects.equals(art.image, "IMG")) {
-            Log.i("Ad Img : ", art.image);
             Picasso.get().load(art.image).into(h.bnd.img);
         }
         setLink(h.bnd.tgLink, art.link);

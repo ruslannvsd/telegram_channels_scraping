@@ -35,8 +35,8 @@ public class FirstFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         bnd = FragmentFirstBinding.inflate(inflater, container, false);
-        articles = new Saving().loadArticles(requireContext());
         summary = new Saving().loadSummary(requireContext());
+        Log.i("custom Summary : ", summary);
         return bnd.getRoot();
     }
 
@@ -45,6 +45,7 @@ public class FirstFragment extends Fragment {
         qtyTV = bnd.showQuantity;
         RecyclerView rv = bnd.articleRv;
         ArticleAd artAd = new ArticleAd();
+        articles = new Saving().loadArticles(requireContext());
         if (articles != null) {
             rv.setLayoutManager(new LinearLayoutManager(requireContext()));
             artAd.setArticles(articles, requireContext());
@@ -73,7 +74,6 @@ public class FirstFragment extends Fragment {
         if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (bnd.enterWord.getText().length() != 0) {
                 String text = bnd.enterWord.getText().toString();
-                Log.i("Text", text);
                 List<String> words = WordFuncs.handlePunctuation(text, requireContext());
                 if (words != null) {
                     Log.i("Words", words.toString());
