@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ntfctns.adap.ArticleAd;
 import com.example.ntfctns.classes.Article;
 import com.example.ntfctns.consts.Cons;
+import com.example.ntfctns.utils.ArticleMaking;
 import com.example.ntfctns.utils.ListFuncs;
 import com.example.ntfctns.utils.TimeConverter;
 import com.example.ntfctns.utils.WordFuncs;
@@ -62,7 +63,7 @@ public class GetLinks {
                                 String lower = artBody.toLowerCase();
                                 if (!word.contains("_")) {
                                     if (lower.contains(word.toLowerCase())) {
-                                        Article art = makeArticle(section, artBody, word, hours);
+                                        Article art = new ArticleMaking().makeArticle(section, artBody, word, hours);
                                         if (art != null) {
                                             artList.add(art);
                                         }
@@ -71,7 +72,7 @@ public class GetLinks {
                                 else {
                                     String[] splitWord = word.split("_");
                                     if (lower.contains(splitWord[0].toLowerCase()) && lower.contains(splitWord[1].toLowerCase())) {
-                                        Article art = makeArticle(section, artBody, word, hours);
+                                        Article art = new ArticleMaking().makeArticle(section, artBody, word, hours);
                                         if (art != null) {
                                             artList.add(art);
                                         }
@@ -115,35 +116,6 @@ public class GetLinks {
         executorService.submit(task);
     }
 
-    @Nullable
-    private Article makeArticle(Element el, String body, String keyW, int hours) {
-        if (hours != 0) {
-            long now = System.currentTimeMillis();
-            long hoursMilli = (long) hours * 60 * 60 * 1000;
-            long threshold = now - hoursMilli;
-            String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
-            long millis = TimeConverter.convertToMillis(articleTime);
-            if (millis >= threshold) {
-                String imgLink = WordFuncs.getLink(el);
-                Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();
-                String art_link = linkElement.attr(LINK);
-                List<String> keywords = new ArrayList<>();
-                keywords.add(keyW);
-                return new Article(imgLink, art_link, body, millis, keywords);
-            }
-        } else {
-            String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
-            long millis = TimeConverter.convertToMillis(articleTime);
-            String imgLink = WordFuncs.getLink(el);
-            Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();
-            String art_link = linkElement.attr(LINK);
-            List<String> keywords = new ArrayList<>();
-            keywords.add(keyW);
-            return new Article(imgLink, art_link, body, millis, keywords);
-        }
-        return null;
-    }
-
 
     private String results(List<String> words, List<Article> articles) {
         StringBuilder string = new StringBuilder();
@@ -155,6 +127,7 @@ public class GetLinks {
                 }
             }
             string.append(word).append(" - ").append(amount).append("; ");
+            amount = 0;
         }
         if (!string.toString().equals("")) {
             return string.toString().trim();

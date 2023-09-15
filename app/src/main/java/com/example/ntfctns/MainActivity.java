@@ -13,6 +13,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 
 import com.example.ntfctns.alarm.NtcWorker;
+import com.example.ntfctns.consts.Cons;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
-        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(NtcWorker.class, 4, TimeUnit.HOURS)
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(NtcWorker.class, Cons.TIME_LIMIT, TimeUnit.HOURS) // timeLimit currently is 4
                 .setConstraints(constraints)
                 .build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(

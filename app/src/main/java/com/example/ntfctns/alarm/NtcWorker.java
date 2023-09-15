@@ -16,6 +16,7 @@ import androidx.work.WorkerParameters;
 
 import com.example.ntfctns.MainActivity;
 import com.example.ntfctns.R;
+import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.network.GetOfflineLinks;
 
 public class NtcWorker extends Worker {
@@ -33,7 +34,7 @@ public class NtcWorker extends Worker {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        String summary = new GetOfflineLinks().getArticles(getApplicationContext());
+        String summary = new GetOfflineLinks().getArticles(getApplicationContext(), Cons.TIME_LIMIT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
         NotificationChannel channel = new NotificationChannel(TG_CHN_ID, "Tg News", NotificationManager.IMPORTANCE_HIGH);

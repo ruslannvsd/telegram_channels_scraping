@@ -22,7 +22,6 @@ import com.example.ntfctns.network.GetLinks;
 import com.example.ntfctns.utils.Saving;
 import com.example.ntfctns.utils.WordFuncs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FirstFragment extends Fragment {
@@ -38,7 +37,6 @@ public class FirstFragment extends Fragment {
     ) {
         bnd = FragmentFirstBinding.inflate(inflater, container, false);
         summary = new Saving().loadSummary(requireContext());
-        Log.i("custom Summary : ", summary);
         return bnd.getRoot();
     }
 

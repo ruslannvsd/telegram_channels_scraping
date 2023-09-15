@@ -23,6 +23,7 @@ public class ListFuncs {
             if (amount != 0) {
                 string.append(word).append(" - ").append(amount).append("; ");
             }
+            amount = 0;
         }
         if (!string.toString().equals("")) {
             return string.toString().trim();
@@ -31,11 +32,9 @@ public class ListFuncs {
         }
     }
     public List<Article> sorting(List<Article> artList) {
-        Log.i("custom Sorting list : ", artList.toString());
         List<Article> sorted = artList.stream()
                 .sorted(Comparator.comparingLong(article -> -article.time))
                 .collect(Collectors.toList());
-        Log.i("custom Sorted list : ", artList.toString());
         return sorted;
     }
 
@@ -46,7 +45,6 @@ public class ListFuncs {
                         Function.identity(),
                         (article1, article2) -> {
                             article1.keywords.addAll(article2.keywords);
-                            Log.i("custom Merged Article", article1.body + " - " + article1.keywords);
                             return article1;
                         }))
                 .values());

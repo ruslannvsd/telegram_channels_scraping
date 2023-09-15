@@ -7,7 +7,6 @@ import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -37,7 +36,6 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ArticleAd.ArticleViewHolder h, int p) {
         Article art = articles.get(p);
-        Log.i("custom Ad Article : ", art.body + "\n" + art.keywords);
         int color = cardBgColor(art.time, ctx);
         h.bnd.card.setBackgroundColor(color);
         String time = TimeConverter.convertToReadableTime(art.time);
@@ -74,18 +72,17 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
     public int cardBgColor(long artTime, Context ctx) {
         long now = System.currentTimeMillis();
         long timeDiff = (artTime - now) / (3600000);
-        String string = String.valueOf(timeDiff);
-        if (timeDiff == -1) {
+        if (timeDiff == 0) {
             return ctx.getColor(R.color.one);
-        } else if (timeDiff == -2 || timeDiff == -3) {
+        } else if (timeDiff == -1 || timeDiff == -2) {
             return ctx.getColor(R.color.two);
-        } else if (timeDiff <= -4 && timeDiff > -7) {
+        } else if (timeDiff <= -3 && timeDiff > -6) {
             return ctx.getColor(R.color.three);
-        } else if (timeDiff <= -7 && timeDiff > -12) {
+        } else if (timeDiff <= -6 && timeDiff > -11) {
             return ctx.getColor(R.color.four);
-        } else if (timeDiff <= -12 && timeDiff > -24) {
+        } else if (timeDiff <= -11 && timeDiff > -23) {
             return ctx.getColor(R.color.five);
-        } else if (timeDiff <= -24 && timeDiff > -48) {
+        } else if (timeDiff <= -23 && timeDiff > -47) {
             return ctx.getColor(R.color.six);
         } else {
             return ctx.getColor(R.color.seven);

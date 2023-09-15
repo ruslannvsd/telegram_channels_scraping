@@ -31,7 +31,7 @@
                 android:textSize="20sp"
                 android:gravity="center"
                 android:inputType="text"
-                android:maxLines="1"
+                android:maxLines="3"
                 tools:ignore="Autofill" />
 
             <androidx.constraintlayout.widget.Guideline
