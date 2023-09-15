@@ -9,10 +9,8 @@ import java.time.Instant;
 
 
 public class TimeConverter {
-
     private static final String TG_TIME = "yyyy-MM-dd'T'HH:mm:ssXXX";
     private static final String ART_TIME = "hh.mma dd/MM/yy";
-
     public static long convertToMillis(String datetimeStr) {
         Log.i("custom datetimeStr", datetimeStr);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TG_TIME);

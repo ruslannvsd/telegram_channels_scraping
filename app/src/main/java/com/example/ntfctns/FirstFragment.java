@@ -21,12 +21,14 @@ import com.example.ntfctns.databinding.FragmentFirstBinding;
 import com.example.ntfctns.network.GetLinks;
 import com.example.ntfctns.utils.Saving;
 import com.example.ntfctns.utils.WordFuncs;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class FirstFragment extends Fragment {
     private FragmentFirstBinding bnd;
     private TextView qtyTV;
-    private List<Article> articles;
+    private List<Article> articles = null;
     private String summary;
 
     @Override
@@ -45,7 +47,9 @@ public class FirstFragment extends Fragment {
         qtyTV = bnd.showQuantity;
         RecyclerView rv = bnd.articleRv;
         ArticleAd artAd = new ArticleAd();
-        articles = new Saving().loadArticles(requireContext());
+        if (!new Saving().loadArticles(requireContext()).isEmpty()) {
+            articles = new Saving().loadArticles(requireContext());
+        }
         if (articles != null) {
             rv.setLayoutManager(new LinearLayoutManager(requireContext()));
             artAd.setArticles(articles, requireContext());
@@ -54,6 +58,8 @@ public class FirstFragment extends Fragment {
             new Saving().clearPrefs(requireContext(), Cons.ART_KEY);
             new Saving().clearPrefs(requireContext(), Cons.SUMMARY_KEY);
         }
+
+        bnd.enterWord.setText(String.join(" ", Cons.KEYWORDS));
 
         bnd.enterWord.setOnKeyListener((v, keyCode, event)-> {
             btnClick(keyCode, event, rv, artAd);
@@ -76,7 +82,6 @@ public class FirstFragment extends Fragment {
                 String text = bnd.enterWord.getText().toString();
                 List<String> words = WordFuncs.handlePunctuation(text, requireContext());
                 if (words != null) {
-                    Log.i("Words", words.toString());
                     String hoursStr = bnd.hours.getText().toString();
                     int hours = 0;
                     if (!hoursStr.isEmpty()) {

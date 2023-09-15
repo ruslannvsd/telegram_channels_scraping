@@ -31,9 +31,12 @@ public class ListFuncs {
         }
     }
     public List<Article> sorting(List<Article> artList) {
-        return artList.stream()
+        Log.i("custom Sorting list : ", artList.toString());
+        List<Article> sorted = artList.stream()
                 .sorted(Comparator.comparingLong(article -> -article.time))
                 .collect(Collectors.toList());
+        Log.i("custom Sorted list : ", artList.toString());
+        return sorted;
     }
 
     public List<Article> merging(List<Article> articles) {
@@ -43,7 +46,7 @@ public class ListFuncs {
                         Function.identity(),
                         (article1, article2) -> {
                             article1.keywords.addAll(article2.keywords);
-                            Log.i("custom Merging Article", article1.link + " - " + article1.keywords);
+                            Log.i("custom Merged Article", article1.body + " - " + article1.keywords);
                             return article1;
                         }))
                 .values());

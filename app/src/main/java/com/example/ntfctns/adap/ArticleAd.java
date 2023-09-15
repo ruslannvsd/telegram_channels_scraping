@@ -37,6 +37,7 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ArticleAd.ArticleViewHolder h, int p) {
         Article art = articles.get(p);
+        Log.i("custom Ad Article : ", art.body + "\n" + art.keywords);
         int color = cardBgColor(art.time, ctx);
         h.bnd.card.setBackgroundColor(color);
         String time = TimeConverter.convertToReadableTime(art.time);
@@ -74,9 +75,6 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
         long now = System.currentTimeMillis();
         long timeDiff = (artTime - now) / (3600000);
         String string = String.valueOf(timeDiff);
-        Log.i("Now (milliseconds): ", TimeConverter.convertToReadableTime(now));
-        Log.i("Art Time (milliseconds): ", TimeConverter.convertToReadableTime(artTime));
-        Log.i("Hours : ", string);
         if (timeDiff == -1) {
             return ctx.getColor(R.color.one);
         } else if (timeDiff == -2 || timeDiff == -3) {
@@ -90,7 +88,7 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
         } else if (timeDiff <= -24 && timeDiff > -48) {
             return ctx.getColor(R.color.six);
         } else {
-            return ctx.getColor(R.color.seven); // Replace with the actual color code for "seven"
+            return ctx.getColor(R.color.seven);
         }
     }
 }
