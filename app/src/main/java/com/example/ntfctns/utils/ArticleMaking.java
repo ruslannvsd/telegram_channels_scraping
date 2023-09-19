@@ -25,10 +25,10 @@ public class ArticleMaking {
             long hoursMilli = (long) hours * 60 * 60 * 1000;
             long threshold = now - hoursMilli;
             String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
-            Log.i("custom Time String initial : ", articleTime);
+            Log.i("mine Time initial : ", articleTime);
             long millis = TimeConverter.convertToMillis(articleTime);
-            Log.i("custom Time Str -> long : ", String.valueOf(millis));
-            Log.i("custom Time long -> Str : ", TimeConverter.convertToReadableTime(millis));
+            Log.i("mine Time S>l : ", String.valueOf(millis));
+            Log.i("mine Time l>S : ", TimeConverter.convertToReadableTime(millis));
 
             if (millis >= threshold) {
                 String imgLink = WordFuncs.getLink(el);

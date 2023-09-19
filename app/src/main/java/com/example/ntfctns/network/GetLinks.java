@@ -1,21 +1,16 @@
 package com.example.ntfctns.network;
 
-import static com.example.ntfctns.consts.Cons.ART_META;
-import static com.example.ntfctns.consts.Cons.DATETIME;
-import static com.example.ntfctns.consts.Cons.D_TIME;
-import static com.example.ntfctns.consts.Cons.LINK;
 import static com.example.ntfctns.consts.Cons.MESSAGE_DIV;
-import static com.example.ntfctns.consts.Cons.SECTION;
 import static com.example.ntfctns.consts.Cons.TEXT_DIV;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +19,6 @@ import com.example.ntfctns.classes.Article;
 import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.utils.ArticleMaking;
 import com.example.ntfctns.utils.ListFuncs;
-import com.example.ntfctns.utils.TimeConverter;
 import com.example.ntfctns.utils.WordFuncs;
 
 import org.jsoup.Jsoup;
@@ -34,15 +28,17 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
 public class GetLinks {
-    public void getArticles(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx, TextView txtView, int hours) {
+    RecyclerView rv; Context ctx; PopupWindow window; ArticleAd artAd; TextView txtView;
+    public void getArticles(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx, TextView txtView, int hours, PopupWindow window) {
+        this.rv = rv; this.ctx = ctx; this.window = window; this.artAd = artAd; this.txtView = txtView;
         List<String> links = Cons.CHANNELS;
         //  single-threaded executor for sequential execution in the order of task submission
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -51,7 +47,7 @@ public class GetLinks {
         Callable<Void> task = () -> {
             Document doc;
             for (String link : links) {
-                Log.i("Link", link);
+                Log.i("mine Link", link);
                 try {
                     doc = Jsoup.connect(link).timeout(20 * 1000).get();
                     Elements messageSections = doc.select("div." + MESSAGE_DIV);
@@ -88,24 +84,23 @@ public class GetLinks {
             }
             Handler handler = new Handler(Looper.getMainLooper());
             if (artList.isEmpty()) {
-                Toast.makeText(ctx, "Nothing has been found", Toast.LENGTH_LONG).show();
+                handler.post(() -> {
+                    String nothing = "Nothing has been found";
+                    adPopulating(Collections.emptyList(), nothing);
+                    Toast.makeText(ctx, nothing, Toast.LENGTH_LONG).show();
+                });
             } else {
                 if (words.size() == 1) {
                     List<Article> articles = new ListFuncs().sorting(artList);
                     handler.post(() -> {
-                        rv.setLayoutManager(new LinearLayoutManager(ctx));
-                        artAd.setArticles(articles, ctx);
-                        rv.setAdapter(artAd);
-                        txtView.setText(String.valueOf(articles.size()));
+                        adPopulating(articles, String.valueOf(articles.size()));
                     });
                 } else {
                     List<Article> articles = new ListFuncs().merging(artList);
                     handler.post(() -> {
-                        rv.setLayoutManager(new LinearLayoutManager(ctx));
-                        artAd.setArticles(articles, ctx);
-                        rv.setAdapter(artAd);
                         String results = results(words, articles);
                         if (results != null) {
+                            adPopulating(articles, results);
                             txtView.setText(results);
                         }
                     });
@@ -135,5 +130,12 @@ public class GetLinks {
         else {
             return null;
         }
+    }
+    private void adPopulating(List<Article> list, String text) {
+        window.dismiss();
+        rv.setLayoutManager(new LinearLayoutManager(ctx));
+        artAd.setArticles(list, ctx);
+        rv.setAdapter(artAd);
+        txtView.setText(text);
     }
 }

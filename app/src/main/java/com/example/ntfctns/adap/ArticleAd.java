@@ -14,11 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ntfctns.R;
 import com.example.ntfctns.classes.Article;
 import com.example.ntfctns.databinding.ArticleLBinding;
 import com.example.ntfctns.utils.TimeConverter;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +41,7 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
         String time = TimeConverter.convertToReadableTime(art.time);
         h.bnd.keyword.setText(String.valueOf(art.keywords));
         if (!Objects.equals(art.image, "IMG")) {
-            Picasso.get().load(art.image).into(h.bnd.img);
+            Glide.with(ctx).load(art.image).placeholder(R.drawable.load).into(h.bnd.img);
         }
         setLink(h.bnd.tgLink, art.link);
         h.bnd.artBody.setText(art.body);

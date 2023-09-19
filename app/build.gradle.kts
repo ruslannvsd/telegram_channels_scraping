@@ -46,7 +46,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("org.jsoup:jsoup:1.10.3")
-    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation ("androidx.work:work-runtime:2.8.1")
 
     constraints {

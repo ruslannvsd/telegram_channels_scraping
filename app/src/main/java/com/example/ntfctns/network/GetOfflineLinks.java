@@ -31,7 +31,7 @@ public class GetOfflineLinks {
         List<Article> artList = new ArrayList<>();
         Document doc;
         for (String link : links) {
-            Log.i("Link", link);
+            Log.i("mine Link", link);
             try {
                 doc = Jsoup.connect(link).timeout(30 * 1000).get();
                 Elements messageSections = doc.select("div." + MESSAGE_DIV);
@@ -67,7 +67,7 @@ public class GetOfflineLinks {
         }
         List<Article> articles = new ListFuncs().merging(artList);
         for (Article art : articles) {
-            Log.i("custom Article : ", art.link);
+            Log.i("mine Article : ", art.link);
         }
         String results = new ListFuncs().results(keywords, articles);
         if (results != null) {

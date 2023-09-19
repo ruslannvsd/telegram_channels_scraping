@@ -1,11 +1,13 @@
 package com.example.ntfctns;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.example.ntfctns.classes.Article;
 import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.databinding.FragmentFirstBinding;
 import com.example.ntfctns.network.GetLinks;
+import com.example.ntfctns.utils.Popup;
 import com.example.ntfctns.utils.Saving;
 import com.example.ntfctns.utils.WordFuncs;
 
@@ -80,6 +83,7 @@ public class FirstFragment extends Fragment {
                 String text = bnd.enterWord.getText().toString();
                 List<String> words = WordFuncs.handlePunctuation(text, requireContext());
                 if (words != null) {
+                    closeKeyboard(requireView());
                     String hoursStr = bnd.hours.getText().toString();
                     int hours = 0;
                     if (!hoursStr.isEmpty()) {
@@ -88,9 +92,14 @@ public class FirstFragment extends Fragment {
                             hours = hoursInt;
                         }
                     }
-                    new GetLinks().getArticles(words, rv, artAd, requireContext(), qtyTV, hours);
+                    PopupWindow window = new Popup().showPopup(getView(), requireContext());
+                    new GetLinks().getArticles(words, rv, artAd, requireContext(), qtyTV, hours, window);
                 }
             } else Toast.makeText(requireContext(), "Enter a word", Toast.LENGTH_LONG).show();
         }
+    }
+    private void closeKeyboard(@NonNull View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
