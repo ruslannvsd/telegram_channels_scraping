@@ -18,14 +18,18 @@ public class WordFuncs {
         // text passed is a list of words received from the user.
         // Each word to be checked for presence of prohibited punctuation
         // and a list as a list to be made
-        if (text.contains(" ")) { // if a space as a divider or words
+        if (text.contains(" ")) { // if there's a space as a divider it means more than one word
             String[] text_split = text.split(" ");
             Collections.addAll(words, text_split);
         } else words.add(text); // if a single word was entered
         for (String item : words) {
-            if (item.matches(".*[" + "!\"#$%&'()*+,./:;<=>?@\\[\\]^`{|}~" + "].*")) {
-                Toast.makeText(ctx, "Prohibited punctuation used", Toast.LENGTH_LONG).show();
-                return null; // or return new ArrayList<>(); if you prefer an empty list
+            if (item.length() <= 3) {
+                Toast.makeText(ctx, "Too short word has been entered", Toast.LENGTH_LONG).show();
+            } else {
+                if (item.matches(".*[" + "!\"#$%&'()*+,./:;<=>?@\\[\\]^`{|}~" + "].*")) {
+                    Toast.makeText(ctx, "Prohibited punctuation has been used", Toast.LENGTH_LONG).show();
+                    return null; // return new ArrayList<>();
+                }
             }
         }
         return words;

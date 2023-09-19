@@ -4,8 +4,14 @@ import static java.util.Collections.emptyList;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -21,6 +27,7 @@ import com.example.ntfctns.databinding.ArticleLBinding;
 import com.example.ntfctns.utils.TimeConverter;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>{
@@ -44,7 +51,8 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
             Glide.with(ctx).load(art.image).placeholder(R.drawable.load).into(h.bnd.img);
         }
         setLink(h.bnd.tgLink, art.link);
-        h.bnd.artBody.setText(art.body);
+        SpannableStringBuilder textWithBold = boldWords(art.body, art.keywords);
+        h.bnd.artBody.setText(textWithBold);
         h.bnd.artTime.setText(time);
     }
     @Override
@@ -86,6 +94,36 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
             return ctx.getColor(R.color.six);
         } else {
             return ctx.getColor(R.color.seven);
+        }
+    }
+    @NonNull
+    private static SpannableStringBuilder boldWords(String fullText, @NonNull List<String> wordsToBold) {
+        SpannableStringBuilder sb = new SpannableStringBuilder(fullText);
+        String lowerFullText = fullText.toLowerCase(Locale.ROOT);
+        for (String item : wordsToBold) {
+            if (item.contains("_")) {
+                String[] splitWords = item.split("_");
+                for (String wordToBold : splitWords) {
+                    italicizeWord(sb, lowerFullText, wordToBold);
+                }
+            } else {
+                italicizeWord(sb, lowerFullText, item);
+            }
+        }
+
+        return sb;
+    }
+
+    private static void italicizeWord(SpannableStringBuilder sb, String lowerFullText, String wordToBold) {
+        int startSpan = 0;
+        while (startSpan != -1) {
+            startSpan = lowerFullText.indexOf(wordToBold, startSpan);
+            if (startSpan != -1) {
+                int endSpan = startSpan + wordToBold.length();
+                sb.setSpan(new StyleSpan(Typeface.BOLD), startSpan, endSpan, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sb.setSpan(new ForegroundColorSpan(Color.YELLOW), startSpan, endSpan, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                startSpan = endSpan;
+            }
         }
     }
 }
