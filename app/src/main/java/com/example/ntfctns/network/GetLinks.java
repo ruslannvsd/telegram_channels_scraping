@@ -11,6 +11,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -119,7 +121,8 @@ public class GetLinks {
     }
 
 
-    private String results(List<String> words, List<Article> articles) {
+    @Nullable
+    private String results(@NonNull List<String> words, List<Article> articles) {
         StringBuilder string = new StringBuilder();
         int amount = 0;
         for (String word : words) {
