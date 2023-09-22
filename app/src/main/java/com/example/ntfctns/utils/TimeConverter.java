@@ -2,10 +2,12 @@ package com.example.ntfctns.utils;
 
 import androidx.annotation.NonNull;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.Instant;
+import java.util.Locale;
 
 
 public class TimeConverter {
@@ -21,6 +23,16 @@ public class TimeConverter {
     public static String convertToReadableTime(long millis) {
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ART_TIME);
-        return dateTime.format(formatter).toUpperCase();
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(dateTime, now);
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() % 60;
+        return String.format(
+                Locale.getDefault(),
+                "%dh %dm ago / %s",
+                hours,
+                minutes,
+                dateTime.format(formatter).toUpperCase()
+        );
     }
 }
