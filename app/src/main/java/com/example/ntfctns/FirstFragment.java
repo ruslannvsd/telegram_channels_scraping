@@ -46,7 +46,7 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        qtyTV = bnd.showQuantity;
+        qtyTV = bnd.summary;
         RecyclerView rv = bnd.articleRv;
         ArticleAd artAd = new ArticleAd();
         if (!new Saving().loadArticles(requireContext()).isEmpty()) {
@@ -61,7 +61,7 @@ public class FirstFragment extends Fragment {
             new Saving().clearPrefs(requireContext(), Cons.SUMMARY_KEY);
         }
 
-        bnd.refresh.setOnClickListener(v -> new InputPopup().inputPopup(requireContext()));
+        bnd.makeSchChg.setOnClickListener(v -> new InputPopup().inputPopup(requireContext()));
         bnd.enterWord.setOnKeyListener((v, keyCode, event)-> {
             btnClick(keyCode, event, rv, artAd);
             return false;

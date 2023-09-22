@@ -45,6 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#191919"
+                android:textSize="17sp"
                 android:padding="10dp"
                 android:fontFamily="@font/graublau"
                 app:layout_constraintTop_toBottomOf="@id/img"
@@ -58,22 +59,23 @@
                 android:fontFamily="@font/graublau"
                 android:contentDescription="Link"
                 android:minHeight="32dp"
-                android:textAlignment="center"
+                android:textAlignment="textEnd"
                 android:textSize="17sp"
-                app:layout_constraintTop_toBottomOf="@id/keyword"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/keyword"
+                app:layout_constraintBottom_toBottomOf="@id/keyword"
+                app:layout_constraintStart_toEndOf="@id/keyword"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/art_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
+                android:padding="10dp"
                 android:fontFamily="@font/graublau"
                 android:textSize="15sp"
                 android:textColor="@color/white"
                 android:contentDescription="Body"
-                app:layout_constraintTop_toBottomOf="@id/tg_link"
+                app:layout_constraintTop_toBottomOf="@id/keyword"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
