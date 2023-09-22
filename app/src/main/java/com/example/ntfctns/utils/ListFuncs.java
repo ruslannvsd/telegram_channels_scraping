@@ -1,7 +1,5 @@
 package com.example.ntfctns.utils;
 
-import android.util.Log;
-
 import com.example.ntfctns.classes.Article;
 
 import java.util.ArrayList;
@@ -32,10 +30,8 @@ public class ListFuncs {
         }
     }
     public List<Article> sorting(List<Article> artList) {
-        List<Article> sorted = artList.stream()
-                .sorted(Comparator.comparingLong(article -> -article.time))
+        return artList.stream().sorted(Comparator.comparingLong(article -> -article.time))
                 .collect(Collectors.toList());
-        return sorted;
     }
 
     public List<Article> merging(List<Article> articles) {

@@ -14,6 +14,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -48,7 +49,11 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
         String time = TimeConverter.convertToReadableTime(art.time);
         h.bnd.keyword.setText(String.valueOf(art.keywords));
         if (!Objects.equals(art.image, "IMG")) {
-            Glide.with(ctx).load(art.image).placeholder(R.drawable.load).into(h.bnd.img);
+            Glide.with(ctx).load(R.drawable.line).placeholder(R.drawable.load).into(h.bnd.divider);
+            Glide.with(ctx).load(art.image).dontTransform().placeholder(R.drawable.load).into(h.bnd.img);
+        } else {
+            Glide.with(ctx).load(R.drawable.line).placeholder(R.drawable.load).into(h.bnd.divider);
+            h.bnd.img.setVisibility(View.GONE);
         }
         setLink(h.bnd.tgLink, art.link);
         SpannableStringBuilder textWithBold = boldWords(art.body, art.keywords);

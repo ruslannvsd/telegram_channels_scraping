@@ -47,8 +47,9 @@ public class WordFuncs {
         if (photoElement != null) {
             String styleValue = photoElement.attr("style");
             return styleValue.substring(styleValue.indexOf("url('") + 5, styleValue.lastIndexOf("')"));
+        } else {
+            return "IMG";
         }
-        return "IMG";
     }
 }
 

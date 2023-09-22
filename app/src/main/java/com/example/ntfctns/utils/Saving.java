@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.ntfctns.classes.Article;
 import com.example.ntfctns.consts.Cons;
@@ -18,6 +19,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class Saving {
+    public void clearPrefs(@NonNull Context ctx, String key) {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
     public void saveArticles(@NonNull Context ctx, List<Article> articles) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -45,23 +53,34 @@ public class Saving {
         }
     }
 
-    public void clearPrefs(@NonNull Context ctx, String key) {
+    public void saveText(@NonNull Context ctx, String text, String key) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(key);
+        editor.putString(key, text);
         editor.apply();
     }
 
-    public void saveSummary(@NonNull Context ctx, String summary, String key) {
+    public String loadText(@NonNull Context ctx, String key) {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(key, "");
+    }
+
+    public void saveWords(@NonNull Context ctx, List<String> words) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, summary);
+        Gson gson = new Gson();
+        String jsonWords = gson.toJson(words);
+        editor.putString(Cons.WORDS_KEY, jsonWords);
         editor.apply();
     }
 
-    public String loadSummary(@NonNull Context ctx) {
+    @Nullable
+    public List<String> loadWords(@NonNull Context ctx) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(Cons.SUMMARY_KEY, "");
+        String jsonWords = sharedPreferences.getString(Cons.WORDS_KEY, "");
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<String>>() {}.getType();
+        return gson.fromJson(jsonWords, type);
     }
 }
 

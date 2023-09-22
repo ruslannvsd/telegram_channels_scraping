@@ -13,7 +13,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 
 import com.example.ntfctns.alarm.NtcWorker;
-import com.example.ntfctns.consts.Cons;
+import com.example.ntfctns.utils.Hours;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,12 +22,12 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         createNotificationChannel();
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
-        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(NtcWorker.class, Cons.TIME_LIMIT, TimeUnit.HOURS) // timeLimit currently is 4
+        int hours = new Hours().getHours(this);
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(NtcWorker.class, hours, TimeUnit.HOURS)
                 .setConstraints(constraints)
                 .build();
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(

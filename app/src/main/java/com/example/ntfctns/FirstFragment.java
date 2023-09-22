@@ -21,7 +21,8 @@ import com.example.ntfctns.classes.Article;
 import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.databinding.FragmentFirstBinding;
 import com.example.ntfctns.network.GetLinks;
-import com.example.ntfctns.utils.Popup;
+import com.example.ntfctns.popups.InputPopup;
+import com.example.ntfctns.popups.LoadPopup;
 import com.example.ntfctns.utils.Saving;
 import com.example.ntfctns.utils.WordFuncs;
 
@@ -39,7 +40,7 @@ public class FirstFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         bnd = FragmentFirstBinding.inflate(inflater, container, false);
-        summary = new Saving().loadSummary(requireContext());
+        summary = new Saving().loadText(requireContext(), Cons.SUMMARY_KEY);
         return bnd.getRoot();
     }
 
@@ -60,8 +61,7 @@ public class FirstFragment extends Fragment {
             new Saving().clearPrefs(requireContext(), Cons.SUMMARY_KEY);
         }
 
-        bnd.enterWord.setText(String.join(" ", Cons.KEYWORDS));
-
+        bnd.refresh.setOnClickListener(v -> new InputPopup().inputPopup(requireContext()));
         bnd.enterWord.setOnKeyListener((v, keyCode, event)-> {
             btnClick(keyCode, event, rv, artAd);
             return false;
@@ -92,7 +92,7 @@ public class FirstFragment extends Fragment {
                             hours = hoursInt;
                         }
                     }
-                    PopupWindow window = new Popup().showPopup(getView(), requireContext());
+                    PopupWindow window = new LoadPopup().loadPopup(getView(), requireContext());
                     new GetLinks().getArticles(words, rv, artAd, requireContext(), qtyTV, hours, window);
                 }
             } else Toast.makeText(requireContext(), "Enter a word", Toast.LENGTH_LONG).show();

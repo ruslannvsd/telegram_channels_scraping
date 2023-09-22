@@ -26,18 +26,18 @@ import java.util.Objects;
 public class GetOfflineLinks {
     public String getArticles(Context ctx, int time) {
         String text = null;
-        List<String> keywords = Cons.KEYWORDS;
+        List<String> keywords = new Saving().loadWords(ctx);
         List<String> links = Cons.CHANNELS;
         List<Article> artList = new ArrayList<>();
         Document doc;
         for (String link : links) {
-            Log.i("mine Link", link);
             try {
                 doc = Jsoup.connect(link).timeout(30 * 1000).get();
                 Elements messageSections = doc.select("div." + MESSAGE_DIV);
                 for (Element section : messageSections) {
                     Element articleBody = section.select("div." + TEXT_DIV).first();
                     if (articleBody != null) {
+                        assert keywords != null;
                         for (String word : keywords) {
                             String artBody = WordFuncs.replaceBR(articleBody);
                             String lower = artBody.toLowerCase();
@@ -66,13 +66,11 @@ public class GetOfflineLinks {
             }
         }
         List<Article> articles = new ListFuncs().merging(artList);
-        for (Article art : articles) {
-            Log.i("mine Article : ", art.link);
-        }
+        assert keywords != null;
         String results = new ListFuncs().results(keywords, articles);
         if (results != null) {
             text = results;
-            new Saving().saveSummary(ctx, results, Cons.SUMMARY_KEY);
+            new Saving().saveText(ctx, results, Cons.SUMMARY_KEY);
             new Saving().saveArticles(ctx, articles);
         }
         return text;

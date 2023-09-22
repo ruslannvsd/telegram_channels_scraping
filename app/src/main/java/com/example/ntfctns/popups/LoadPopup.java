@@ -1,4 +1,4 @@
-package com.example.ntfctns.utils;
+package com.example.ntfctns.popups;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -13,12 +13,12 @@ import com.bumptech.glide.Glide;
 import com.example.ntfctns.R;
 import com.example.ntfctns.databinding.LoadPopupBinding;
 
-public class Popup {
+public class LoadPopup {
     @NonNull
-    public PopupWindow showPopup(View anchorView, Context ctx) {
-        LoadPopupBinding popupBinding = LoadPopupBinding.inflate(LayoutInflater.from(ctx), null, false);
-        View popupView = popupBinding.getRoot();
-        Glide.with(ctx).load(R.drawable.load).into(popupBinding.load);
+    public PopupWindow loadPopup(View anchorView, Context ctx) {
+        LoadPopupBinding bnd = LoadPopupBinding.inflate(LayoutInflater.from(ctx), null, false);
+        View popupView = bnd.getRoot();
+        Glide.with(ctx).load(R.drawable.load).into(bnd.load);
         int width = ViewGroup.LayoutParams.WRAP_CONTENT;
         int height = ViewGroup.LayoutParams.WRAP_CONTENT;
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height);

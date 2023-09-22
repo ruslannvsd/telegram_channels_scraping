@@ -6,8 +6,6 @@ import static com.example.ntfctns.consts.Cons.D_TIME;
 import static com.example.ntfctns.consts.Cons.LINK;
 import static com.example.ntfctns.consts.Cons.SECTION;
 
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 
 import com.example.ntfctns.classes.Article;
@@ -25,11 +23,7 @@ public class ArticleMaking {
             long hoursMilli = (long) hours * 60 * 60 * 1000;
             long threshold = now - hoursMilli;
             String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
-            Log.i("mine Time initial : ", articleTime);
             long millis = TimeConverter.convertToMillis(articleTime);
-            Log.i("mine Time S>l : ", String.valueOf(millis));
-            Log.i("mine Time l>S : ", TimeConverter.convertToReadableTime(millis));
-
             if (millis >= threshold) {
                 String imgLink = WordFuncs.getLink(el);
                 Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();

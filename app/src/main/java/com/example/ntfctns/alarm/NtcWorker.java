@@ -15,12 +15,13 @@ import androidx.work.WorkerParameters;
 
 import com.example.ntfctns.MainActivity;
 import com.example.ntfctns.R;
-import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.network.GetOfflineLinks;
+import com.example.ntfctns.utils.Hours;
 
 public class NtcWorker extends Worker {
     static String TG_CHN_ID = "TG_NTC_ID";
     static int TG_NTC_ID = 12345;
+    Context ctx;
     public NtcWorker(@NonNull Context context, @NonNull WorkerParameters params) {
         super(context, params);
     }
@@ -29,17 +30,17 @@ public class NtcWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        ctx = getApplicationContext();
+        Intent intent = new Intent(ctx, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        String summary = new GetOfflineLinks().getArticles(getApplicationContext(), Cons.TIME_LIMIT);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+        PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        int hours = new Hours().getHours(ctx);
+        String summary = new GetOfflineLinks().getArticles(ctx, hours);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(ctx);
         NotificationChannel channel = new NotificationChannel(TG_CHN_ID, "Tg News", NotificationManager.IMPORTANCE_HIGH);
         channel.setDescription("Tg News Desc");
         notificationManager.createNotificationChannel(channel);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), TG_CHN_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, TG_CHN_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Tg News : ")
                 .setContentText(summary)

@@ -19,20 +19,32 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:contentDescription="Divider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
                 android:id="@+id/img"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
+                android:contentDescription="Article Image"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/keyword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#125942"
+                android:background="#191919"
                 android:padding="10dp"
                 android:fontFamily="@font/graublau"
                 app:layout_constraintTop_toBottomOf="@id/img"
@@ -59,6 +71,7 @@
                 android:paddingHorizontal="5dp"
                 android:fontFamily="@font/graublau"
                 android:textSize="15sp"
+                android:textColor="@color/white"
                 android:contentDescription="Body"
                 app:layout_constraintTop_toBottomOf="@id/tg_link"
                 app:layout_constraintStart_toStartOf="parent"

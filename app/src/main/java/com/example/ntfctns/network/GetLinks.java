@@ -36,9 +36,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GetLinks {
-    RecyclerView rv; Context ctx; PopupWindow window; ArticleAd artAd; TextView txtView;
+    RecyclerView rv;
+    Context ctx;
+    PopupWindow window;
+    ArticleAd artAd;
+    TextView txtView;
+
     public void getArticles(List<String> words, RecyclerView rv, ArticleAd artAd, Context ctx, TextView txtView, int hours, PopupWindow window) {
-        this.rv = rv; this.ctx = ctx; this.window = window; this.artAd = artAd; this.txtView = txtView;
+        this.rv = rv;
+        this.ctx = ctx;
+        this.window = window;
+        this.artAd = artAd;
+        this.txtView = txtView;
         List<String> links = Cons.CHANNELS;
         //  single-threaded executor for sequential execution in the order of task submission
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -47,30 +56,30 @@ public class GetLinks {
         Callable<Void> task = () -> {
             Document doc;
             for (String link : links) {
-                Log.i("mine Link", link);
                 try {
                     doc = Jsoup.connect(link).timeout(20 * 1000).get();
                     Elements messageSections = doc.select("div." + MESSAGE_DIV);
                     for (Element section : messageSections) {
-                        Element articleBody = section.select("div." + TEXT_DIV).first();
-                        if (articleBody != null) {
-                            for (String word : words) {
-                                String artBody = WordFuncs.replaceBR(articleBody);
-                                String lower = artBody.toLowerCase();
-                                if (!word.contains("_")) {
-                                    if (lower.contains(word.toLowerCase())) {
-                                        Article art = new ArticleMaking().makeArticle(section, artBody, word, hours);
-                                        if (art != null) {
-                                            artList.add(art);
+                        Elements allTextDivs = section.select("div." + TEXT_DIV);
+                        for (Element articleBody : allTextDivs) {
+                            if (articleBody.parent() != null && !articleBody.parent().hasClass("tgme_widget_message_reply")) {
+                                for (String word : words) {
+                                    String artBody = WordFuncs.replaceBR(articleBody);
+                                    String lower = artBody.toLowerCase();
+                                    if (!word.contains("_")) {
+                                        if (lower.contains(word.toLowerCase())) {
+                                            Article art = new ArticleMaking().makeArticle(section, artBody, word, hours);
+                                            if (art != null) {
+                                                artList.add(art);
+                                            }
                                         }
-                                    }
-                                }
-                                else {
-                                    String[] splitWord = word.split("_");
-                                    if (lower.contains(splitWord[0].toLowerCase()) && lower.contains(splitWord[1].toLowerCase())) {
-                                        Article art = new ArticleMaking().makeArticle(section, artBody, word, hours);
-                                        if (art != null) {
-                                            artList.add(art);
+                                    } else {
+                                        String[] splitWord = word.split("_");
+                                        if (lower.contains(splitWord[0].toLowerCase()) && lower.contains(splitWord[1].toLowerCase())) {
+                                            Article art = new ArticleMaking().makeArticle(section, artBody, word, hours);
+                                            if (art != null) {
+                                                artList.add(art);
+                                            }
                                         }
                                     }
                                 }
@@ -92,9 +101,7 @@ public class GetLinks {
             } else {
                 if (words.size() == 1) {
                     List<Article> articles = new ListFuncs().sorting(artList);
-                    handler.post(() -> {
-                        adPopulating(articles, String.valueOf(articles.size()));
-                    });
+                    handler.post(() -> adPopulating(articles, String.valueOf(articles.size())));
                 } else {
                     List<Article> articles = new ListFuncs().merging(artList);
                     handler.post(() -> {
@@ -126,11 +133,11 @@ public class GetLinks {
         }
         if (!string.toString().equals("")) {
             return string.toString().trim();
-        }
-        else {
+        } else {
             return null;
         }
     }
+
     private void adPopulating(List<Article> list, String text) {
         window.dismiss();
         rv.setLayoutManager(new LinearLayoutManager(ctx));
