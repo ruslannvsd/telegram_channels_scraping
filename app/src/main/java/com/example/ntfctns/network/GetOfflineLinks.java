@@ -31,6 +31,7 @@ public class GetOfflineLinks {
         List<Article> artList = new ArrayList<>();
         Document doc;
         for (String link : links) {
+            Log.i("Searching : ", link);
             try {
                 doc = Jsoup.connect(link).timeout(30 * 1000).get();
                 Elements messageSections = doc.select("div." + MESSAGE_DIV);

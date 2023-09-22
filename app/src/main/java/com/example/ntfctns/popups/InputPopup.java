@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.core.widget.PopupWindowCompat;
 import androidx.work.Constraints;
@@ -47,6 +48,7 @@ public class InputPopup {
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
         );
 
+        Toast.makeText(ctx, "Enter 0 hours to cancel", Toast.LENGTH_SHORT).show();
         List<String> wordsList = new Saving().loadWords(ctx);
         String hours = new Saving().loadText(ctx, Cons.HOURS_KEY);
         if (wordsList != null) {
@@ -73,18 +75,20 @@ public class InputPopup {
             List<String> newWordList = WordFuncs.handlePunctuation(words, ctx);
             new Saving().saveWords(ctx, newWordList);
             new Saving().saveText(ctx, newHours, Cons.HOURS_KEY);
-            WorkManager.getInstance(ctx).cancelUniqueWork("PeriodicWork");
             int hours = new Hours().getHours(ctx);
-            updateWorkSchedule(hours);
+            WorkManager.getInstance(ctx).cancelUniqueWork("PeriodicWork");
+            if (hours != 0) {
+                schedule(hours);
+            }
             window.dismiss();
         }
     }
 
-    public void updateWorkSchedule(int newHours) {
+    public void schedule(int period) {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
-        PeriodicWorkRequest newRequest = new PeriodicWorkRequest.Builder(NtcWorker.class, newHours, TimeUnit.HOURS)
+        PeriodicWorkRequest newRequest = new PeriodicWorkRequest.Builder(NtcWorker.class, period, TimeUnit.HOURS)
                 .setConstraints(constraints)
                 .build();
         WorkManager.getInstance(ctx).enqueueUniquePeriodicWork(
