@@ -21,6 +21,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class GetOfflineLinks {
@@ -68,7 +69,8 @@ public class GetOfflineLinks {
         }
         List<Article> articles = new ListFuncs().merging(artList);
         assert keywords != null;
-        String results = new ListFuncs().results(keywords, articles);
+        List<Map.Entry<String, Integer>> sortedList = new ListFuncs().results(keywords, articles);
+        String results = new ListFuncs().listToString(sortedList);
         if (results != null) {
             text = results;
             new Saving().saveText(ctx, results, Cons.SUMMARY_KEY);

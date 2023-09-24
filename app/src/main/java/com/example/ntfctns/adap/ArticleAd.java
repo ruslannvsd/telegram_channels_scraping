@@ -30,6 +30,7 @@ import com.example.ntfctns.utils.TimeConverter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>{
     List<Article> articles = emptyList();
@@ -46,7 +47,13 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
         Article art = articles.get(p);
         int color = cardBgColor(art.time, ctx);
         h.bnd.card.setBackgroundColor(color);
+        long currentTimeMillis = System.currentTimeMillis();
+        long differenceMillis = currentTimeMillis - art.time;
+        long hours = TimeUnit.MILLISECONDS.toHours(differenceMillis);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(differenceMillis) % 60;
+        String timeDifference = String.format(Locale.getDefault(), "%dh %dm ago / ", hours, minutes);
         String time = TimeConverter.convertToReadableTime(art.time);
+        h.bnd.artTime.setText(timeDifference + time);
         h.bnd.keyword.setText(String.valueOf(art.keywords));
         if (!Objects.equals(art.image, "IMG")) {
             Glide.with(ctx).load(R.drawable.line).placeholder(R.drawable.load).into(h.bnd.divider);
@@ -58,8 +65,8 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
         setLink(h.bnd.tgLink, art.link);
         SpannableStringBuilder textWithBold = boldWords(art.body, art.keywords);
         h.bnd.artBody.setText(textWithBold);
-        h.bnd.artTime.setText(time);
     }
+
     @Override
     public int getItemCount() {
         return articles.size();

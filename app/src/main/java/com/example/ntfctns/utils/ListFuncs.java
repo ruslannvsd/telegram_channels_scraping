@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ListFuncs {
-    public String results(List<String> words, List<Article> articles) {
+    public List<Map.Entry<String, Integer>> results(List<String> words, List<Article> articles) {
         Map<String, Integer> keywordFrequency = new HashMap<>();
         for (String word : words) {
             int count = 0;
@@ -26,6 +26,10 @@ public class ListFuncs {
         }
         List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(keywordFrequency.entrySet());
         sortedList.sort(Map.Entry.<String, Integer>comparingByValue().reversed());
+        return sortedList;
+    }
+
+    public String listToString(List<Map.Entry<String, Integer>> sortedList) {
         StringBuilder string = new StringBuilder();
         for (Map.Entry<String, Integer> entry : sortedList) {
             string.append(entry.getKey()).append(" - ").append(entry.getValue()).append("; ");
