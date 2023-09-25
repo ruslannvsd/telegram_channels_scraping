@@ -59,10 +59,6 @@ public class InputPopup {
         if (hours.length() != 0) {
             bnd.period.setText(hours);
         }
-        // bnd.enterWords.setOnKeyListener((v, keyCode, event) -> {
-            // btnClick(keyCode, event);
-            // return false;
-        // });
         bnd.period.setOnKeyListener((v, keyCode, event) -> {
             btnClick(keyCode, event);
             return false;

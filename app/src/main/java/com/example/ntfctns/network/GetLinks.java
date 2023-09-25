@@ -4,7 +4,6 @@ import static com.example.ntfctns.consts.Cons.MESSAGE_DIV;
 import static com.example.ntfctns.consts.Cons.TEXT_DIV;
 
 import static java.lang.Integer.*;
-import static java.util.Collections.sort;
 
 import android.content.Context;
 import android.os.Handler;
@@ -14,7 +13,6 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,7 +35,6 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -80,7 +77,6 @@ public class GetLinks {
                     Elements messageSections = doc.select("div." + MESSAGE_DIV);
                     String chnTitle = doc.select("meta[property=og:title]").first().attr("content");
                     for (Element section : messageSections) {
-                        Log.i("Custom El size ", link + " : " + String.valueOf(messageSections.size()));
                         Elements allTextDivs = section.select("div." + TEXT_DIV);
                         for (Element articleBody : allTextDivs) {
                             if (articleBody.parent() != null && !articleBody.parent().hasClass("tgme_widget_message_reply")) {
@@ -125,6 +121,7 @@ public class GetLinks {
                     handler.post(() -> adPopulating(articles, keywords));
                 } else {
                     List<Article> articles = new ListFuncs().merging(artList);
+                    keywords.add(0, new Keyword(Cons.ALL, articles.size()));
                     handler.post(() -> {
                         List<Keyword> results = results(keywords, articles);
                         adPopulating(articles, results);
@@ -137,7 +134,7 @@ public class GetLinks {
     }
 
 
-    @Nullable
+    @NonNull
     private List<Keyword> results(@NonNull List<Keyword> keywords, List<Article> articles) {
         int count = 0;
         for (Keyword keyword : keywords) {
@@ -150,14 +147,8 @@ public class GetLinks {
             keyword.setAmount(count);
             count = 0;
         }
-        Iterator<Keyword> iterator = keywords.iterator();
-        while (iterator.hasNext()) {
-            Keyword kw = iterator.next();
-            if (kw.getAmount() == 0) {
-                iterator.remove();
-            }
-        }
-        sort(keywords, (k1, k2) -> compare(k2.getAmount(), k1.getAmount()));
+        keywords.removeIf(kw -> kw.getAmount() == 0);
+        keywords.sort((k1, k2) -> compare(k2.getAmount(), k1.getAmount()));
         return keywords;
     }
 

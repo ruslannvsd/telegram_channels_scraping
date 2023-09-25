@@ -66,15 +66,6 @@ public class Saving {
         return sharedPreferences.getString(key, "");
     }
 
-    public void saveWords(@NonNull Context ctx, List<String> words) {
-        SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String jsonWords = gson.toJson(words);
-        editor.putString(Cons.WORDS_KEY, jsonWords);
-        editor.apply();
-    }
-
     @Nullable
     public List<String> loadWords(@NonNull Context ctx) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
@@ -96,11 +87,9 @@ public class Saving {
     public List<Keyword> loadKeywords(@NonNull Context ctx) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
         String json = sharedPreferences.getString(Cons.KEYW_KEY, "");
-
         if (json.length() == 0) {
             return new ArrayList<>();
         }
-
         Type type = new TypeToken<List<Keyword>>() {}.getType();
         try {
             List<Keyword> keywords = new Gson().fromJson(json, type);

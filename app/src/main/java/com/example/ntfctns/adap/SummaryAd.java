@@ -13,7 +13,9 @@ import java.util.List;
 
 public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder> {
     List<Keyword> keywords;
+    private final OnKeywordClick onKeywordClick;
 
+    @NonNull
     public SummaryAd.SummaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         SummaryLBinding bnd = SummaryLBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new SummaryAd.SummaryViewHolder(bnd);
@@ -23,6 +25,11 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
     public void onBindViewHolder(@NonNull SummaryViewHolder h, int p) {
         String keyword = keywords.get(p).getKey() + " - " + keywords.get(p).getAmount();
         h.bnd.keyword.setText(keyword);
+        h.itemView.setOnClickListener(v -> {
+            if (onKeywordClick != null) {
+                onKeywordClick.onKeywordClick(keywords.get(p));
+            }
+        });
     }
 
     @Override
@@ -39,5 +46,11 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
     }
     public void setKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
+    }
+    public interface OnKeywordClick {
+        void onKeywordClick(Keyword keyword);
+    }
+    public SummaryAd(OnKeywordClick onKeywordClick) {
+        this.onKeywordClick = onKeywordClick;
     }
 }

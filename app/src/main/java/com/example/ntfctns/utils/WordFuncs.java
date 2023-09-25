@@ -11,7 +11,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class WordFuncs {

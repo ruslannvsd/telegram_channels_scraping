@@ -1,5 +1,6 @@
 package com.example.ntfctns;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -14,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.ntfctns.adap.ArticleAd;
 import com.example.ntfctns.adap.SummaryAd;
@@ -30,11 +30,13 @@ import com.example.ntfctns.utils.WordFuncs;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class FirstFragment extends Fragment {
+public class FirstFragment extends Fragment implements SummaryAd.OnKeywordClick {
     private FragmentFirstBinding bnd;
     private RecyclerView sumRv;
+    private ArticleAd artAd;
     private List<Article> articles = null;
     private List<Keyword> summary;
 
@@ -51,8 +53,8 @@ public class FirstFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         sumRv = bnd.summaryRv;
         RecyclerView artRv = bnd.articleRv;
-        ArticleAd artAd = new ArticleAd();
-        SummaryAd sumAd = new SummaryAd();
+        artAd = new ArticleAd();
+        SummaryAd sumAd = new SummaryAd(this);
         if (!new Saving().loadArticles(requireContext()).isEmpty()) {
             articles = new Saving().loadArticles(requireContext());
             summary = new Saving().loadKeywords(requireContext());
@@ -71,11 +73,11 @@ public class FirstFragment extends Fragment {
         }
 
         bnd.makeSchChg.setOnClickListener(v -> new InputPopup().inputPopup(requireContext()));
-        bnd.enterWord.setOnKeyListener((v, keyCode, event)-> {
+        bnd.enterWord.setOnKeyListener((v, keyCode, event) -> {
             btnClick(keyCode, event, artRv, artAd, sumAd);
             return false;
         });
-        bnd.hours.setOnKeyListener((v, keyCode, event)-> {
+        bnd.hours.setOnKeyListener((v, keyCode, event) -> {
             btnClick(keyCode, event, artRv, artAd, sumAd);
             return false;
         });
@@ -86,6 +88,7 @@ public class FirstFragment extends Fragment {
         super.onDestroyView();
         bnd = null;
     }
+
     private void btnClick(int keyCode, KeyEvent event, RecyclerView rv, ArticleAd artAd, SummaryAd sumAd) {
         if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (bnd.enterWord.getText().length() != 0) {
@@ -105,8 +108,26 @@ public class FirstFragment extends Fragment {
             } else Toast.makeText(requireContext(), "Enter a word", Toast.LENGTH_LONG).show();
         }
     }
+
     private void closeKeyboard(@NonNull View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onKeywordClick(Keyword keyword) {
+        List<Article> newArtList = new ArrayList<>();
+        if (keyword.key.equals(Cons.ALL)) {
+            newArtList = articles;
+        } else {
+            for (Article article : articles) {
+                if (article.keywords.contains(keyword.getKey())) {
+                    newArtList.add(article);
+                }
+            }
+        }
+        artAd.setArticles(newArtList, requireContext());
+        artAd.notifyDataSetChanged();
     }
 }
