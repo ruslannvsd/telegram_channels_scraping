@@ -39,7 +39,7 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
 
     public static class SummaryViewHolder extends RecyclerView.ViewHolder {
         private final SummaryLBinding bnd;
-        public SummaryViewHolder(SummaryLBinding bnd) {
+        public SummaryViewHolder(@NonNull SummaryLBinding bnd) {
             super(bnd.getRoot());
             this.bnd = bnd;
         }

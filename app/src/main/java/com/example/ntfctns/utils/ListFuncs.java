@@ -4,6 +4,8 @@ import static java.lang.Integer.*;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.ntfctns.classes.Article;
 import com.example.ntfctns.classes.Keyword;
 import com.example.ntfctns.consts.Cons;
@@ -36,12 +38,12 @@ public class ListFuncs {
         return keywords;
     }
 
-    public List<Article> sorting(List<Article> artList) {
+    public List<Article> sorting(@NonNull List<Article> artList) {
         return artList.stream().sorted(Comparator.comparingLong(article -> -article.time))
                 .collect(Collectors.toList());
     }
 
-    public List<Article> merging(List<Article> articles) {
+    public List<Article> merging(@NonNull List<Article> articles) {
         List<Article> merged = new ArrayList<>(articles.stream()
                 .collect(Collectors.toMap(
                         article -> article.link,

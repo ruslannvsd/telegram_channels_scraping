@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.widget.PopupWindowCompat;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -34,7 +35,7 @@ public class InputPopup {
     InputPopupBinding bnd;
     Context ctx;
     PopupWindow window;
-    public void inputPopup(Context ctx) {
+    public void inputPopup(@NonNull Context ctx) {
         this.ctx = ctx;
         LayoutInflater inflater =
                 (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

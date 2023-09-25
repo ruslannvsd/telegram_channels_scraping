@@ -116,7 +116,7 @@ public class FirstFragment extends Fragment implements SummaryAd.OnKeywordClick 
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onKeywordClick(Keyword keyword) {
+    public void onKeywordClick(@NonNull Keyword keyword) {
         List<Article> newArtList = new ArrayList<>();
         if (keyword.key.equals(Cons.ALL)) {
             newArtList = articles;

@@ -55,7 +55,8 @@ public class NtcWorker extends Worker {
         notificationManager.notify(TG_NTC_ID, builder.build());
         return Result.success();
     }
-    private String makingString(List<Keyword> summary) {
+    @NonNull
+    private String makingString(@NonNull List<Keyword> summary) {
         StringBuilder summaryString = new StringBuilder();
         for (Keyword keyword : summary) {
             summaryString.append(keyword.getKey())

@@ -16,13 +16,12 @@ import java.util.List;
 public class WordFuncs {
     public static List<Keyword> handlePunctuation(String text, Context ctx) {
         List<Keyword> keywords = new ArrayList<>();
-        // text passed is a list of words received from the user.
-        // Each word to be checked for the presence of prohibited punctuation
-        // and added to the list as a Keyword object
-        if (text.contains(" ")) { // if there's a space as a divider it means more than one word
+        List<String> words = new ArrayList<>();
+        if (text.contains(" ")) {
             String[] text_split = text.split(" ");
             for (String word : text_split) {
                 if (isValidWord(word, ctx)) {
+                    words.add(word);
                     keywords.add(new Keyword(word, 0));
                 }
             }
@@ -31,6 +30,7 @@ public class WordFuncs {
                 keywords.add(new Keyword(text, 0));
             }
         }
+        new Saving().saveWords(ctx, words);
         return keywords;
     }
 

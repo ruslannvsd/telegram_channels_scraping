@@ -74,7 +74,7 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
     }
     public static class ArticleViewHolder extends RecyclerView.ViewHolder {
         private final ArticleLBinding bnd;
-        public ArticleViewHolder(ArticleLBinding bnd) {
+        public ArticleViewHolder(@NonNull ArticleLBinding bnd) {
             super(bnd.getRoot());
             this.bnd = bnd;
         }
@@ -85,7 +85,7 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
         this.ctx = ctx;
         notifyDataSetChanged();
     }
-    private void setLink(TextView tgLink, String link) {
+    private void setLink(@NonNull TextView tgLink, String link) {
         tgLink.setText(Html.fromHtml(link, Html.FROM_HTML_MODE_COMPACT));
         Linkify.addLinks(tgLink, Linkify.ALL);
         tgLink.setMovementMethod(LinkMovementMethod.getInstance());
