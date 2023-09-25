@@ -53,6 +53,7 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
         long minutes = TimeUnit.MILLISECONDS.toMinutes(differenceMillis) % 60;
         String timeDifference = String.format(Locale.getDefault(), "%dh %dm ago / ", hours, minutes);
         String time = TimeConverter.convertToReadableTime(art.time);
+        h.bnd.channel.setText(art.chnTitle);
         h.bnd.artTime.setText(timeDifference + time);
         h.bnd.keyword.setText(String.valueOf(art.keywords));
         if (!Objects.equals(art.image, "IMG")) {
@@ -62,7 +63,7 @@ public class ArticleAd extends RecyclerView.Adapter<ArticleAd.ArticleViewHolder>
             Glide.with(ctx).load(R.drawable.line).placeholder(R.drawable.load).into(h.bnd.divider);
             h.bnd.img.setVisibility(View.GONE);
         }
-        setLink(h.bnd.tgLink, art.link);
+        setLink(h.bnd.link, art.link);
         SpannableStringBuilder textWithBold = boldWords(art.body, art.keywords);
         h.bnd.artBody.setText(textWithBold);
     }

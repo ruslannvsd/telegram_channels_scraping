@@ -44,26 +44,26 @@
                 android:id="@+id/keyword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#191919"
+                android:background="#062700"
+                android:textColor="@color/white"
                 android:textSize="17sp"
                 android:padding="10dp"
                 android:fontFamily="@font/graublau"
                 app:layout_constraintTop_toBottomOf="@id/img"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
-                android:id="@+id/tg_link"
+                android:id="@+id/channel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="5dp"
                 android:fontFamily="@font/graublau"
-                android:contentDescription="Link"
-                android:minHeight="32dp"
-                android:textAlignment="textEnd"
-                android:textSize="17sp"
+                android:textColor="#6AF4E2"
+                android:contentDescription="Channel Name"
+                android:textSize="19sp"
                 app:layout_constraintTop_toTopOf="@id/keyword"
                 app:layout_constraintBottom_toBottomOf="@id/keyword"
-                app:layout_constraintStart_toEndOf="@id/keyword"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
@@ -80,6 +80,19 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
+                android:id="@+id/link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp"
+                android:fontFamily="@font/graublau"
+                android:contentDescription="Link"
+                android:minHeight="32dp"
+                android:textAlignment="textEnd"
+                android:textSize="17sp"
+                app:layout_constraintTop_toBottomOf="@id/art_body"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
                 android:id="@+id/art_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,7 +101,7 @@
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
                 android:contentDescription="Time"
-                app:layout_constraintTop_toBottomOf="@id/art_body"
+                app:layout_constraintTop_toBottomOf="@id/link"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 

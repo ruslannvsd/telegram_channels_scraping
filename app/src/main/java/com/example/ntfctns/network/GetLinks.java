@@ -78,7 +78,9 @@ public class GetLinks {
                 try {
                     doc = Jsoup.connect(link).timeout(20 * 1000).get();
                     Elements messageSections = doc.select("div." + MESSAGE_DIV);
+                    String chnTitle = doc.select("meta[property=og:title]").first().attr("content");
                     for (Element section : messageSections) {
+                        Log.i("Custom El size ", link + " : " + String.valueOf(messageSections.size()));
                         Elements allTextDivs = section.select("div." + TEXT_DIV);
                         for (Element articleBody : allTextDivs) {
                             if (articleBody.parent() != null && !articleBody.parent().hasClass("tgme_widget_message_reply")) {
@@ -88,7 +90,7 @@ public class GetLinks {
                                     String lower = artBody.toLowerCase();
                                     if (!word.contains("_")) {
                                         if (lower.contains(word.toLowerCase())) {
-                                            Article art = new ArticleMaking().makeArticle(section, artBody, word, hours);
+                                            Article art = new ArticleMaking().makeArticle(chnTitle, section, artBody, word, hours);
                                             if (art != null) {
                                                 artList.add(art);
                                             }
@@ -96,7 +98,7 @@ public class GetLinks {
                                     } else {
                                         String[] splitWord = word.split("_");
                                         if (lower.contains(splitWord[0].toLowerCase()) && lower.contains(splitWord[1].toLowerCase())) {
-                                            Article art = new ArticleMaking().makeArticle(section, artBody, word, hours);
+                                            Article art = new ArticleMaking().makeArticle(chnTitle, section, artBody, word, hours);
                                             if (art != null) {
                                                 artList.add(art);
                                             }

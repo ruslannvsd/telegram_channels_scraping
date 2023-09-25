@@ -35,6 +35,7 @@ public class GetOfflineLinks {
             try {
                 doc = Jsoup.connect(link).timeout(30 * 1000).get();
                 Elements messageSections = doc.select("div." + MESSAGE_DIV);
+                String chnTitle = doc.select("meta[property=og:title]").first().attr("content");
                 for (Element section : messageSections) {
                     Element articleBody = section.select("div." + TEXT_DIV).first();
                     if (articleBody != null) {
@@ -45,7 +46,7 @@ public class GetOfflineLinks {
                             String lower = artBody.toLowerCase();
                             if (!word.contains("_")) {
                                 if (lower.contains(word.toLowerCase())) {
-                                    Article art = new ArticleMaking().makeArticle(section, artBody, word, time);
+                                    Article art = new ArticleMaking().makeArticle(chnTitle, section, artBody, word, time);
                                     if (art != null) {
                                         artList.add(art);
                                     }
@@ -53,7 +54,7 @@ public class GetOfflineLinks {
                             } else {
                                 String[] splitWord = word.split("_");
                                 if (lower.contains(splitWord[0].toLowerCase()) && lower.contains(splitWord[1].toLowerCase())) {
-                                    Article art = new ArticleMaking().makeArticle(section, artBody, word, time);
+                                    Article art = new ArticleMaking().makeArticle(chnTitle, section, artBody, word, time);
                                     if (art != null) {
                                         artList.add(art);
                                     }

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ArticleMaking {
     @Nullable
-    public Article makeArticle(Element el, String body, String keyW, int hours) {
+    public Article makeArticle(String chnTitle, Element el, String body, String keyW, int hours) {
         if (hours != 0) {
             long now = System.currentTimeMillis();
             long hoursMilli = (long) hours * 60 * 60 * 1000;
@@ -30,7 +30,7 @@ public class ArticleMaking {
                 String artLink = linkElement.attr(LINK);
                 List<String> keywords = new ArrayList<>();
                 keywords.add(keyW);
-                return new Article(imgLink, artLink, body, millis, keywords);
+                return new Article(chnTitle, imgLink, artLink, body, millis, keywords);
             }
         } else {
             String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);
@@ -40,7 +40,7 @@ public class ArticleMaking {
             String art_link = linkElement.attr(LINK);
             List<String> keywords = new ArrayList<>();
             keywords.add(keyW);
-            return new Article(imgLink, art_link, body, millis, keywords);
+            return new Article(chnTitle, imgLink, art_link, body, millis, keywords);
         }
         return null;
     }
