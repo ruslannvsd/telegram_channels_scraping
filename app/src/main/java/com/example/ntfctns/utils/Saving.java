@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.ntfctns.classes.Article;
+import com.example.ntfctns.classes.Keyword;
 import com.example.ntfctns.consts.Cons;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -81,6 +82,33 @@ public class Saving {
         Gson gson = new Gson();
         Type type = new TypeToken<List<String>>() {}.getType();
         return gson.fromJson(jsonWords, type);
+    }
+
+    public void saveKeywords(Context ctx, List<Keyword> keywords) {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(keywords);
+        editor.putString(Cons.KEYW_KEY, json);
+        editor.apply();
+    }
+
+    public List<Keyword> loadKeywords(@NonNull Context ctx) {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(Cons.PREFS, Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString(Cons.KEYW_KEY, "");
+
+        if (json.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        Type type = new TypeToken<List<Keyword>>() {}.getType();
+        try {
+            List<Keyword> keywords = new Gson().fromJson(json, type);
+            return keywords != null ? keywords : new ArrayList<>();
+        } catch (JsonSyntaxException e) {
+            Log.e("JsonSyntaxException", Objects.requireNonNull(e.getMessage()));
+            return new ArrayList<>();
+        }
     }
 }
 

@@ -52,18 +52,14 @@
                 tools:ignore="Autofill" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/summary"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/summary_rv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Text"
-            android:textSize="18sp"
+            android:layout_height="0dp"
             android:padding="10dp"
-            android:fontFamily="@font/graublau"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_field"
-            android:gravity="center" />
+            app:layout_constraintTop_toBottomOf="@+id/input_field" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/article_rv"
@@ -71,7 +67,7 @@
             android:layout_height="0dp"
             android:layout_marginBottom="20dp"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/summary"
+            app:layout_constraintTop_toBottomOf="@+id/summary_rv"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

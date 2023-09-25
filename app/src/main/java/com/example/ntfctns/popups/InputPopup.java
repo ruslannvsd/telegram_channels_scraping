@@ -20,6 +20,7 @@ import androidx.work.WorkManager;
 
 import com.example.ntfctns.R;
 import com.example.ntfctns.alarm.NtcWorker;
+import com.example.ntfctns.classes.Keyword;
 import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.databinding.InputPopupBinding;
 import com.example.ntfctns.utils.Hours;
@@ -72,8 +73,8 @@ public class InputPopup {
         if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
             String words = bnd.enterWords.getText().toString();
             String newHours = bnd.period.getText().toString();
-            List<String> newWordList = WordFuncs.handlePunctuation(words, ctx);
-            new Saving().saveWords(ctx, newWordList);
+            List<Keyword> newWordList = WordFuncs.handlePunctuation(words, ctx);
+            new Saving().saveKeywords(ctx, newWordList);
             new Saving().saveText(ctx, newHours, Cons.HOURS_KEY);
             int hours = new Hours().getHours(ctx);
             WorkManager.getInstance(ctx).cancelUniqueWork("PeriodicWork");

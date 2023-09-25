@@ -27,10 +27,10 @@ public class ArticleMaking {
             if (millis >= threshold) {
                 String imgLink = WordFuncs.getLink(el);
                 Element linkElement = el.select("span." + ART_META + " a." + SECTION).first();
-                String art_link = linkElement.attr(LINK);
+                String artLink = linkElement.attr(LINK);
                 List<String> keywords = new ArrayList<>();
                 keywords.add(keyW);
-                return new Article(imgLink, art_link, body, millis, keywords);
+                return new Article(imgLink, artLink, body, millis, keywords);
             }
         } else {
             String articleTime = el.select("span." + ART_META + DATETIME).attr(D_TIME);

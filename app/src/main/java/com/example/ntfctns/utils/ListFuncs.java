@@ -1,40 +1,39 @@
 package com.example.ntfctns.utils;
 
+import static java.lang.Integer.*;
+import static java.util.Collections.*;
+
 import com.example.ntfctns.classes.Article;
+import com.example.ntfctns.classes.Keyword;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ListFuncs {
-    public List<Map.Entry<String, Integer>> results(List<String> words, List<Article> articles) {
-        Map<String, Integer> keywordFrequency = new HashMap<>();
-        for (String word : words) {
-            int count = 0;
+    public List<Keyword> results(List<Keyword> keywords, List<Article> articles) {
+        int count = 0;
+        for (Keyword word : keywords) {
             for (Article article : articles) {
-                if (article.keywords.contains(word)) {
+                if (article.keywords.contains(word.key)) {
                     count++;
                 }
             }
-            if (count > 0) {
-                keywordFrequency.put(word, count);
+            word.setAmount(count);
+            count = 0;
+        }
+        Iterator<Keyword> iterator = keywords.iterator();
+        while (iterator.hasNext()) {
+            Keyword kw = iterator.next();
+            if (kw.getAmount() == 0) {
+                iterator.remove();
             }
         }
-        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(keywordFrequency.entrySet());
-        sortedList.sort(Map.Entry.<String, Integer>comparingByValue().reversed());
-        return sortedList;
-    }
-
-    public String listToString(List<Map.Entry<String, Integer>> sortedList) {
-        StringBuilder string = new StringBuilder();
-        for (Map.Entry<String, Integer> entry : sortedList) {
-            string.append(entry.getKey()).append(" - ").append(entry.getValue()).append("; ");
-        }
-        return string.length() > 0 ? string.toString().trim() : null;
+        sort(keywords, (k1, k2) -> compare(k2.getAmount(), k1.getAmount()));
+        return keywords;
     }
 
     public List<Article> sorting(List<Article> artList) {

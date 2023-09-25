@@ -8,16 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.ntfctns.adap.ArticleAd;
+import com.example.ntfctns.adap.SummaryAd;
 import com.example.ntfctns.classes.Article;
+import com.example.ntfctns.classes.Keyword;
 import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.databinding.FragmentFirstBinding;
 import com.example.ntfctns.network.GetLinks;
@@ -25,14 +27,16 @@ import com.example.ntfctns.popups.InputPopup;
 import com.example.ntfctns.popups.LoadPopup;
 import com.example.ntfctns.utils.Saving;
 import com.example.ntfctns.utils.WordFuncs;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 
 import java.util.List;
 
 public class FirstFragment extends Fragment {
     private FragmentFirstBinding bnd;
-    private TextView qtyTV;
+    private RecyclerView sumRv;
     private List<Article> articles = null;
-    private String summary;
+    private List<Keyword> summary;
 
     @Override
     public View onCreateView(
@@ -40,34 +44,39 @@ public class FirstFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         bnd = FragmentFirstBinding.inflate(inflater, container, false);
-        summary = new Saving().loadText(requireContext(), Cons.SUMMARY_KEY);
         return bnd.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        qtyTV = bnd.summary;
-        RecyclerView rv = bnd.articleRv;
+        sumRv = bnd.summaryRv;
+        RecyclerView artRv = bnd.articleRv;
         ArticleAd artAd = new ArticleAd();
+        SummaryAd sumAd = new SummaryAd();
         if (!new Saving().loadArticles(requireContext()).isEmpty()) {
             articles = new Saving().loadArticles(requireContext());
+            summary = new Saving().loadKeywords(requireContext());
         }
         if (articles != null) {
-            rv.setLayoutManager(new LinearLayoutManager(requireContext()));
+            artRv.setLayoutManager(new LinearLayoutManager(requireContext()));
             artAd.setArticles(articles, requireContext());
-            rv.setAdapter(artAd);
-            qtyTV.setText(summary);
+            artRv.setAdapter(artAd);
+            FlexboxLayoutManager layM = new FlexboxLayoutManager(requireContext());
+            layM.setJustifyContent(JustifyContent.FLEX_START);
+            sumRv.setLayoutManager(layM);
+            sumAd.setKeywords(summary);
+            sumRv.setAdapter(sumAd);
             new Saving().clearPrefs(requireContext(), Cons.ART_KEY);
             new Saving().clearPrefs(requireContext(), Cons.SUMMARY_KEY);
         }
 
         bnd.makeSchChg.setOnClickListener(v -> new InputPopup().inputPopup(requireContext()));
         bnd.enterWord.setOnKeyListener((v, keyCode, event)-> {
-            btnClick(keyCode, event, rv, artAd);
+            btnClick(keyCode, event, artRv, artAd, sumAd);
             return false;
         });
         bnd.hours.setOnKeyListener((v, keyCode, event)-> {
-            btnClick(keyCode, event, rv, artAd);
+            btnClick(keyCode, event, artRv, artAd, sumAd);
             return false;
         });
     }
@@ -77,24 +86,22 @@ public class FirstFragment extends Fragment {
         super.onDestroyView();
         bnd = null;
     }
-    private void btnClick(int keyCode, KeyEvent event, RecyclerView rv, ArticleAd artAd) {
+    private void btnClick(int keyCode, KeyEvent event, RecyclerView rv, ArticleAd artAd, SummaryAd sumAd) {
         if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (bnd.enterWord.getText().length() != 0) {
                 String text = bnd.enterWord.getText().toString();
-                List<String> words = WordFuncs.handlePunctuation(text, requireContext());
-                if (words != null) {
-                    closeKeyboard(requireView());
-                    String hoursStr = bnd.hours.getText().toString();
-                    int hours = 0;
-                    if (!hoursStr.isEmpty()) {
-                        int hoursInt = Integer.parseInt(hoursStr);
-                        if (hoursInt > 0 && hoursInt <= 48) {
-                            hours = hoursInt;
-                        }
+                List<Keyword> words = WordFuncs.handlePunctuation(text, requireContext());
+                closeKeyboard(requireView());
+                String hoursStr = bnd.hours.getText().toString();
+                int hours = 0;
+                if (!hoursStr.isEmpty()) {
+                    int hoursInt = Integer.parseInt(hoursStr);
+                    if (hoursInt > 0 && hoursInt <= 48) {
+                        hours = hoursInt;
                     }
-                    PopupWindow window = new LoadPopup().loadPopup(getView(), requireContext());
-                    new GetLinks().getArticles(words, rv, artAd, requireContext(), qtyTV, hours, window);
                 }
+                PopupWindow window = new LoadPopup().loadPopup(getView(), requireContext());
+                new GetLinks().getArticles(words, rv, artAd, sumAd, requireContext(), sumRv, hours, window);
             } else Toast.makeText(requireContext(), "Enter a word", Toast.LENGTH_LONG).show();
         }
     }

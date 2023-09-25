@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ntfctns.classes.Keyword;
 import com.example.ntfctns.databinding.SummaryLBinding;
 
 import java.util.List;
-import java.util.Map;
 
 public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder> {
-    List<Map.Entry<String, Integer>> keywords;
+    List<Keyword> keywords;
 
     public SummaryAd.SummaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         SummaryLBinding bnd = SummaryLBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
@@ -21,13 +21,13 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull SummaryViewHolder h, int p) {
-        String keyword = keywords.get(p).getKey() + " - " + keywords.get(p).getValue();
+        String keyword = keywords.get(p).getKey() + " - " + keywords.get(p).getAmount();
         h.bnd.keyword.setText(keyword);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return keywords.size();
     }
 
     public static class SummaryViewHolder extends RecyclerView.ViewHolder {
@@ -37,7 +37,7 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
             this.bnd = bnd;
         }
     }
-    public void setKeywords(List<Map.Entry<String, Integer>> keywords) {
+    public void setKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
     }
 }

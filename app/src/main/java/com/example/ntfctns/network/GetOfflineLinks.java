@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.ntfctns.classes.Article;
+import com.example.ntfctns.classes.Keyword;
 import com.example.ntfctns.consts.Cons;
 import com.example.ntfctns.utils.ArticleMaking;
 import com.example.ntfctns.utils.ListFuncs;
@@ -21,13 +22,11 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class GetOfflineLinks {
-    public String getArticles(Context ctx, int time) {
-        String text = null;
-        List<String> keywords = new Saving().loadWords(ctx);
+    public List<Keyword> getArticles(Context ctx, int time) {
+        List<Keyword> keywords = new Saving().loadKeywords(ctx);
         List<String> links = Cons.CHANNELS;
         List<Article> artList = new ArrayList<>();
         Document doc;
@@ -40,7 +39,8 @@ public class GetOfflineLinks {
                     Element articleBody = section.select("div." + TEXT_DIV).first();
                     if (articleBody != null) {
                         assert keywords != null;
-                        for (String word : keywords) {
+                        for (Keyword keyword : keywords) {
+                            String word = keyword.key;
                             String artBody = WordFuncs.replaceBR(articleBody);
                             String lower = artBody.toLowerCase();
                             if (!word.contains("_")) {
@@ -69,13 +69,11 @@ public class GetOfflineLinks {
         }
         List<Article> articles = new ListFuncs().merging(artList);
         assert keywords != null;
-        List<Map.Entry<String, Integer>> sortedList = new ListFuncs().results(keywords, articles);
-        String results = new ListFuncs().listToString(sortedList);
-        if (results != null) {
-            text = results;
-            new Saving().saveText(ctx, results, Cons.SUMMARY_KEY);
+        List<Keyword> sortedList = new ListFuncs().results(keywords, articles);
+        if (!sortedList.isEmpty()) {
+            new Saving().saveKeywords(ctx, sortedList);
             new Saving().saveArticles(ctx, articles);
         }
-        return text;
+        return sortedList;
     }
 }
