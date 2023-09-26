@@ -58,13 +58,14 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="5dp"
                 android:fontFamily="@font/graublau"
-                android:textColor="#6AF4E2"
+                android:textColor="#68E6B4"
+                android:gravity="center"
                 android:contentDescription="Channel Name"
                 android:textSize="19sp"
                 app:layout_constraintTop_toTopOf="@id/keyword"
                 app:layout_constraintBottom_toBottomOf="@id/keyword"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toStartOf="@id/keyword" />
 
             <TextView
                 android:id="@+id/art_body"

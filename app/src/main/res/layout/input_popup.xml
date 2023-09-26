@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#091847"
+        android:backgroundTint="#053733"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,8 +24,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter words"
                 android:textSize="20sp"
+                android:textColor="@color/white"
                 android:inputType="textMultiLine"
-                android:maxLines="7"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

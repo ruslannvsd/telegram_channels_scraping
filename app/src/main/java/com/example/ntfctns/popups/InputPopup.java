@@ -1,12 +1,16 @@
 package com.example.ntfctns.popups;
 
 import android.content.Context;
-import android.text.TextUtils;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -51,12 +55,8 @@ public class InputPopup {
         );
 
         Toast.makeText(ctx, "Enter 0 hours to cancel", Toast.LENGTH_SHORT).show();
-        List<String> wordsList = new Saving().loadWords(ctx);
         String hours = new Saving().loadText(ctx, Cons.HOURS_KEY);
-        if (wordsList != null) {
-            String wordsAsString = TextUtils.join(" ", wordsList);
-            bnd.enterWords.setText(wordsAsString);
-        }
+        wordsColoring(bnd.enterWords);
         if (hours.length() != 0) {
             bnd.period.setText(hours);
         }
@@ -94,5 +94,31 @@ public class InputPopup {
                 ExistingPeriodicWorkPolicy.KEEP,
                 newRequest
         );
+    }
+    private void wordsColoring(EditText enterWords) {
+        List<String> wordsList = new Saving().loadWords(ctx);
+        if (wordsList != null) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+            int start = 0;
+            int end;
+            int[] colors = {
+                    ctx.getColor(R.color.w_one),
+                    ctx.getColor(R.color.w_two),
+                    ctx.getColor(R.color.w_three),
+                    ctx.getColor(R.color.w_four)
+            };
+            int colorIndex = 0;
+            for (String word : wordsList) {
+                end = start + word.length();
+                SpannableString spanString = new SpannableString(word);
+                spanString.setSpan(new ForegroundColorSpan(colors[colorIndex]), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringBuilder.append(spanString);
+                spannableStringBuilder.append(" ");
+                start = end + 1;
+                colorIndex = (colorIndex + 1) % colors.length;
+            }
+
+            enterWords.setText(spannableStringBuilder, EditText.BufferType.SPANNABLE);
+        }
     }
 }

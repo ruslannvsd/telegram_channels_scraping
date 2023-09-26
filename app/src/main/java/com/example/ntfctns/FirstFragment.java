@@ -66,7 +66,7 @@ public class FirstFragment extends Fragment implements SummaryAd.OnKeywordClick 
             FlexboxLayoutManager layM = new FlexboxLayoutManager(requireContext());
             layM.setJustifyContent(JustifyContent.FLEX_START);
             sumRv.setLayoutManager(layM);
-            sumAd.setKeywords(summary);
+            sumAd.setKeywords(summary, requireContext());
             sumRv.setAdapter(sumAd);
             new Saving().clearPrefs(requireContext(), Cons.ART_KEY);
             new Saving().clearPrefs(requireContext(), Cons.SUMMARY_KEY);

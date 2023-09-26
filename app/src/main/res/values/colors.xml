@@ -10,4 +10,11 @@
     <color name="five">#3b2600</color>
     <color name="six">#3e1f00</color>
     <color name="seven">#250F00</color>
+
+    <color name="yellow">#3E7500</color>
+
+    <color name="w_one">#ffef98</color>
+    <color name="w_two">#def6a1</color>
+    <color name="w_three">#bcfcb4</color>
+    <color name="w_four">#98ffcd</color>
 </resources>

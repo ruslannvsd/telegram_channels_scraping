@@ -1,18 +1,26 @@
 package com.example.ntfctns.adap;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ntfctns.R;
 import com.example.ntfctns.classes.Keyword;
 import com.example.ntfctns.databinding.SummaryLBinding;
 
 import java.util.List;
 
 public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder> {
+    int largest;
+    int smallest;
+    Context ctx;
     List<Keyword> keywords;
+    private int pressed = -1;
     private final OnKeywordClick onKeywordClick;
 
     @NonNull
@@ -23,9 +31,19 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull SummaryViewHolder h, int p) {
-        String keyword = keywords.get(p).getKey() + " - " + keywords.get(p).getAmount();
-        h.bnd.keyword.setText(keyword);
+        Keyword keyword = keywords.get(p);
+        String kw = keyword.getKey() + " - " + keyword.getAmount();
+        int color = cardBgColor(keyword.amount, ctx);
+        if (pressed == p) {
+            h.bnd.card.setBackgroundColor(ctx.getColor(R.color.black));
+        } else {
+            h.bnd.card.setBackgroundColor(color);
+        }
+        h.bnd.keyword.setText(kw);
         h.itemView.setOnClickListener(v -> {
+            notifyItemChanged(pressed);
+            pressed = h.getAdapterPosition();
+            notifyItemChanged(pressed);
             if (onKeywordClick != null) {
                 onKeywordClick.onKeywordClick(keywords.get(p));
             }
@@ -44,13 +62,33 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
             this.bnd = bnd;
         }
     }
-    public void setKeywords(List<Keyword> keywords) {
+    public void setKeywords(@NonNull List<Keyword> keywords, Context ctx) {
         this.keywords = keywords;
+        this.ctx = ctx;
+        this.largest = keywords.get(1).amount;
+        this.smallest = keywords.get(keywords.size()-1).amount;
     }
     public interface OnKeywordClick {
         void onKeywordClick(Keyword keyword);
     }
     public SummaryAd(OnKeywordClick onKeywordClick) {
         this.onKeywordClick = onKeywordClick;
+    }
+    public int cardBgColor(int quantity, Context ctx) {
+        if (smallest == largest) {
+            return ctx.getColor(R.color.two);
+        }
+        float range = (largest - smallest) / 5.0f;
+        if (quantity > largest) {
+            return ctx.getColor(R.color.yellow);
+        } else if (quantity <= smallest + range) {
+            return ctx.getColor(R.color.five);
+        } else if (quantity <= smallest + 2 * range) {
+            return ctx.getColor(R.color.four);
+        } else if (quantity <= smallest + 3 * range) {
+            return ctx.getColor(R.color.three);
+        } else {
+            return ctx.getColor(R.color.two);
+        }
     }
 }

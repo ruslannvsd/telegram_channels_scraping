@@ -11,22 +11,25 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class WordFuncs {
     public static List<Keyword> handlePunctuation(String text, Context ctx) {
         List<Keyword> keywords = new ArrayList<>();
         List<String> words = new ArrayList<>();
+        HashSet<String> uniqueWords = new HashSet<>(); // To store unique words
         if (text.contains(" ")) {
             String[] text_split = text.split(" ");
             for (String word : text_split) {
-                if (isValidWord(word, ctx)) {
+                if (isValidWord(word, ctx) && uniqueWords.add(word)) { // Check for uniqueness
                     words.add(word);
                     keywords.add(new Keyword(word, 0));
                 }
             }
-        } else { // if a single word was entered
+        } else {
             if (isValidWord(text, ctx)) {
+                uniqueWords.add(text);
                 keywords.add(new Keyword(text, 0));
             }
         }
