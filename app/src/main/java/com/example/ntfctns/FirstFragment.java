@@ -3,6 +3,7 @@ package com.example.ntfctns;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +95,7 @@ public class FirstFragment extends Fragment implements SummaryAd.OnKeywordClick 
             if (bnd.enterWord.getText().length() != 0) {
                 String text = bnd.enterWord.getText().toString();
                 List<Keyword> words = WordFuncs.handlePunctuation(text, requireContext());
+                // Log.i("Keywords", words.get(0).key);
                 closeKeyboard(requireView());
                 String hoursStr = bnd.hours.getText().toString();
                 int hours = 0;

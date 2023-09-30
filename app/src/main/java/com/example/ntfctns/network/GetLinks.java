@@ -112,7 +112,7 @@ public class GetLinks {
             Handler handler = new Handler(Looper.getMainLooper());
             if (artList.isEmpty()) {
                 handler.post(() -> {
-                    adPopulating(Collections.emptyList(), keywords);
+                    adPopulating(Collections.emptyList(), Collections.emptyList());
                     Toast.makeText(ctx, "Nothing has been found", Toast.LENGTH_LONG).show();
                 });
             } else {

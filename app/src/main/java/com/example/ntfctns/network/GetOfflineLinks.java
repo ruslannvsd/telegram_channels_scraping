@@ -39,7 +39,6 @@ public class GetOfflineLinks {
                 for (Element section : messageSections) {
                     Element articleBody = section.select("div." + TEXT_DIV).first();
                     if (articleBody != null) {
-                        assert keywords != null;
                         for (Keyword keyword : keywords) {
                             String word = keyword.key;
                             String artBody = WordFuncs.replaceBR(articleBody);

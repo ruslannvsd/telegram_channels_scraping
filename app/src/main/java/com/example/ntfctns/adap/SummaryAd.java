@@ -20,7 +20,7 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
     int smallest;
     Context ctx;
     List<Keyword> keywords;
-    private int pressed = -1;
+    private int pressed = 0;
     private final OnKeywordClick onKeywordClick;
 
     @NonNull
@@ -65,8 +65,10 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
     public void setKeywords(@NonNull List<Keyword> keywords, Context ctx) {
         this.keywords = keywords;
         this.ctx = ctx;
-        this.largest = keywords.get(1).amount;
-        this.smallest = keywords.get(keywords.size()-1).amount;
+        if (keywords.size() > 1) {
+            this.largest = keywords.get(1).amount;
+            this.smallest = keywords.get(keywords.size()-1).amount;
+        }
     }
     public interface OnKeywordClick {
         void onKeywordClick(Keyword keyword);
