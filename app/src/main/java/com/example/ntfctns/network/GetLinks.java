@@ -160,7 +160,7 @@ public class GetLinks {
         FlexboxLayoutManager layM = new FlexboxLayoutManager(ctx);
         layM.setJustifyContent(JustifyContent.FLEX_START);
         sumRv.setLayoutManager(layM);
-        sumAd.setKeywords(keywords, ctx);
+        sumAd.setKeywords(keywords, ctx, -1);
         sumRv.setAdapter(sumAd);
     }
 }

@@ -17,13 +17,11 @@ import java.util.List;
 public class WordFuncs {
     public static List<Keyword> handlePunctuation(String text, Context ctx) {
         List<Keyword> keywords = new ArrayList<>();
-        List<String> words = new ArrayList<>();
         HashSet<String> uniqueWords = new HashSet<>(); // To store unique words
         if (text.contains(" ")) {
             String[] text_split = text.split(" ");
             for (String word : text_split) {
                 if (isValidWord(word, ctx) && uniqueWords.add(word)) { // Check for uniqueness
-                    words.add(word);
                     keywords.add(new Keyword(word, 0));
                 }
             }
@@ -33,7 +31,6 @@ public class WordFuncs {
                 keywords.add(new Keyword(text, 0));
             }
         }
-        new Saving().saveWords(ctx, words);
         return keywords;
     }
 

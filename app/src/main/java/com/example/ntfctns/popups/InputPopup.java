@@ -34,6 +34,7 @@ import com.example.ntfctns.utils.WordFuncs;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class InputPopup {
     InputPopupBinding bnd;
@@ -71,6 +72,10 @@ public class InputPopup {
             String words = bnd.enterWords.getText().toString();
             String newHours = bnd.period.getText().toString();
             List<Keyword> newWordList = WordFuncs.handlePunctuation(words, ctx);
+            List<String> stringWords = newWordList.stream()
+                    .map(Keyword::getKey)
+                    .collect(Collectors.toList());
+            new Saving().saveWords(ctx, stringWords);
             new Saving().saveKeywords(ctx, newWordList);
             new Saving().saveText(ctx, newHours, Cons.HOURS_KEY);
             int hours = new Hours().getHours(ctx);

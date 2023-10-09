@@ -1,10 +1,8 @@
 package com.example.ntfctns.adap;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +18,7 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
     int smallest;
     Context ctx;
     List<Keyword> keywords;
-    private int pressed = 0;
+    private int pressed;
     private final OnKeywordClick onKeywordClick;
 
     @NonNull
@@ -62,7 +60,8 @@ public class SummaryAd extends RecyclerView.Adapter<SummaryAd.SummaryViewHolder>
             this.bnd = bnd;
         }
     }
-    public void setKeywords(@NonNull List<Keyword> keywords, Context ctx) {
+    public void setKeywords(@NonNull List<Keyword> keywords, Context ctx, int pressed) {
+        this.pressed = pressed;
         this.keywords = keywords;
         this.ctx = ctx;
         if (keywords.size() > 1) {
