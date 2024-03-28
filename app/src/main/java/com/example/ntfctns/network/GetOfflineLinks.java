@@ -1,5 +1,6 @@
 package com.example.ntfctns.network;
 
+import static com.example.ntfctns.consts.Cons.JS_TEXT;
 import static com.example.ntfctns.consts.Cons.MESSAGE_DIV;
 import static com.example.ntfctns.consts.Cons.TEXT_DIV;
 
@@ -37,7 +38,7 @@ public class GetOfflineLinks {
                 Elements messageSections = doc.select("div." + MESSAGE_DIV);
                 String chnTitle = doc.select("meta[property=og:title]").first().attr("content");
                 for (Element section : messageSections) {
-                    Element articleBody = section.select("div." + TEXT_DIV).first();
+                    Element articleBody = section.select("div." + TEXT_DIV + JS_TEXT).first();
                     if (articleBody != null) {
                         for (Keyword keyword : keywords) {
                             String word = keyword.key;

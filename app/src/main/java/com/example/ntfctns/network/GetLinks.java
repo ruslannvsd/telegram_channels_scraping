@@ -1,5 +1,6 @@
 package com.example.ntfctns.network;
 
+import static com.example.ntfctns.consts.Cons.JS_TEXT;
 import static com.example.ntfctns.consts.Cons.MESSAGE_DIV;
 import static com.example.ntfctns.consts.Cons.TEXT_DIV;
 
@@ -77,7 +78,7 @@ public class GetLinks {
                     Elements messageSections = doc.select("div." + MESSAGE_DIV);
                     String chnTitle = doc.select("meta[property=og:title]").first().attr("content");
                     for (Element section : messageSections) {
-                        Elements allTextDivs = section.select("div." + TEXT_DIV);
+                        Elements allTextDivs = section.select("div." + TEXT_DIV + JS_TEXT);
                         for (Element articleBody : allTextDivs) {
                             if (articleBody.parent() != null && !articleBody.parent().hasClass("tgme_widget_message_reply")) {
                                 for (Keyword keyword : keywords) {
